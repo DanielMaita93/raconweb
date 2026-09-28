@@ -1,0 +1,604 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title data-i18n="seo_title">RACON INGENIERÍA | Soluciones de Cableado Estructurado y Redes de Alto Rendimiento</title>
+    <meta name="description" content="Diseño, instalación y certificación de sistemas de cableado estructurado, fibra óptica, ordenamiento de racks y soluciones de conectividad para empresas.">
+    
+    <!-- Metadatos SEO adicionales -->
+    <meta property="og:title" content="RACON INGENIERÍA | Cableado Estructurado y Conectividad Empresarial">
+    <meta property="og:description" content="Optimizamos la infraestructura de red de tu empresa. Especialistas en ordenamiento de racks, cableado Cat6/6A, fibra óptica y CCTV.">
+    <meta property="og:type" content="website">
+    
+    <!-- Favicon (Logotipo corporativo formal de RACON INGENIERÍA) -->
+    <link rel="icon" type="image/png" sizes="64x64" href="assets/favicon-64.png?v=1.6">
+    <link rel="icon" type="image/png" sizes="256x256" href="assets/favicon.png?v=1.6">
+    <link rel="apple-touch-icon" href="assets/favicon.png?v=1.6">
+
+    <!-- Leaflet.js Map CSS -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="" />
+    <!-- Hoja de Estilos -->
+    <link rel="stylesheet" href="style.css?v=2.5">
+</head>
+<body>
+<!-- 
+===================================================================================
+GUIA PASO A PASO: COMO PASAR DE MODO PRUEBAS A PRODUCCION (CORREO CORPORATIVO HOSTINGER)
+===================================================================================
+
+Cuando compres tu dominio y crees tu correo corporativo en Hostinger (ej. contacto@raconnet.com),
+debes hacer los siguientes 3 ajustes sencillos en los archivos de la web:
+
+1. CONFIGURACION EN EL ARCHIVO PHP: send_quote.php
+   * Abre send_quote.php y modifica las siguientes variables al inicio del codigo:
+     * Cambia el modo a produccion (Linea 17):
+       $mode = 'production';
+     * Pon tu nuevo correo corporativo destinatario (Linea 21):
+       $to_email = 'contacto@raconnet.com'; (Aqui pones tu correo de Hostinger)
+
+2. CONFIGURACION EN EL ARCHIVO JAVASCRIPT: app.js
+   * Abre app.js, busca la funcion de envio del formulario (aprox. linea 748) y cambia el modo:
+     * Cambia el modo de correo del cliente:
+       const mailMode = 'production';
+
+3. FORZAR ACTUALIZACION DE CACHE DE LA WEB: index.html
+   * Al final de este archivo (index.html), busca las lineas de carga de los scripts:
+     * Incrementa el numero de la version (?v=1.3 a ?v=1.4 o superior) para obligar a todos los
+       telefonos y computadoras de los clientes a descargar el codigo nuevo sin usar la memoria cache vieja:
+       script src="translations.js?v=1.4"
+       script src="app.js?v=1.4"
+
+===================================================================================
+-->
+
+    <!-- Canvas para Fondo Dinámico de Red -->
+    <canvas id="network-canvas"></canvas>
+
+    <!-- Barra de Navegación -->
+    <header id="main-header">
+        <div class="nav-container">
+            <a href="#" class="logo" id="nav-logo">
+                <img src="assets/logo.png?v=1.6" alt="RACON INGENIERÍA" class="logo-img" width="66" height="34">
+                RACON <span>INGENIERÍA</span>
+            </a>
+            
+            <div class="header-actions">
+                <!-- Selector de Idioma (Pill Toggle) -->
+                <div class="lang-switcher">
+                    <button class="lang-btn active" data-lang="es">ES</button>
+                    <button class="lang-btn" data-lang="en">EN</button>
+                </div>
+
+                <!-- Botón de Alternancia de Tema Claro / Oscuro -->
+                <button id="theme-toggle" class="theme-toggle-btn" aria-label="Cambiar tema">
+                    <svg class="sun-icon" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M12 7c-2.76 0-5 2.24-5 5s2.24 5 5 5 5-2.24 5-5-2.24-5-5-5zM2 13h2c.55 0 1-.45 1-1s-.45-1-1-1H2c-.55 0-1 .45-1 1s.45 1 1 1zm18 0h2c.55 0 1-.45 1-1s-.45-1-1-1h-2c-.55 0-1 .45-1 1s.45 1 1 1zM11 2v2c0 .55.45 1 1 1s1-.45 1-1V2c0-.55-.45-1-1-1s-1 .45-1 1zm0 18v2c0 .55.45 1 1 1s1-.45 1-1v-2c0-.55-.45-1-1-1s-1 .45-1 1zM5.99 4.58c-.39-.39-1.03-.39-1.41 0s-.39 1.03 0 1.41l1.06 1.06c.39.39 1.03.39 1.41 0s.39-1.03 0-1.41L5.99 4.58zm12.37 12.37c-.39-.39-1.03-.39-1.41 0s-.39 1.03 0 1.41l1.06 1.06c.39.39 1.03.39 1.41 0s.39-1.03 0-1.41l-1.06-1.06zm1.06-10.96c.39-.39.39-1.03 0-1.41s-1.03-.39-1.41 0l-1.06 1.06c-.39.39-.39 1.03 0 1.41s1.03.39 1.41 0l1.06-1.06zM7.05 18.36c.39-.39.39-1.03 0-1.41s-1.03-.39-1.41 0l-1.06 1.06c-.39.39-.39 1.03 0 1.41s1.03.39 1.41 0l1.06-1.06z"/>
+                    </svg>
+                    <svg class="moon-icon" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M12.3 22c-5.5 0-10-4.5-10-10 0-4.8 3.4-8.8 8-9.8.5-.1 1 .3.9.8-.1.5-.4.9-.4 1.4 0 4.4 3.6 8 8 8 .5 0 .9-.1 1.4-.4.5-.1.9.4.8.9-1 4.6-5 8-9.8 8z"/>
+                    </svg>
+                </button>
+
+                <button class="hamburger" id="hamburger-menu" aria-label="Abrir menú de navegación">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </button>
+            </div>
+            
+            <ul class="nav-menu" id="nav-menu-list">
+                <li><a href="#inicio" class="nav-link active" id="link-inicio" data-i18n="nav_home">Inicio</a></li>
+                <li><a href="#servicios" class="nav-link" id="link-servicios" data-i18n="nav_services">Servicios</a></li>
+                <li><a href="#galeria" class="nav-link" id="link-galeria" data-i18n="nav_racks">Racks</a></li>
+                <li><a href="#conocenos" class="nav-link" id="link-about" data-i18n="nav_about">Conócenos</a></li>
+                <li><a href="#contacto" class="nav-link" id="link-contacto" data-i18n="nav_contact">Contacto</a></li>
+                <li><button class="nav-btn" id="btn-header-cta" onclick="location.href='#cotizador'" data-i18n="nav_cta">Cotizar Ahora</button></li>
+            </ul>
+        </div>
+    </header>
+
+    <!-- Sección Hero -->
+    <section id="inicio" class="hero">
+        <div class="hero-grid">
+            <div class="hero-content">
+                <span class="section-tag" id="hero-tag" data-i18n="hero_tag">Infraestructura Confiable</span>
+                <h1 class="hero-title" id="main-headline" data-i18n="hero_title">Conectividad de Alta Velocidad para su <span>Empresa</span></h1>
+                <p class="hero-subtitle" id="hero-description" data-i18n="hero_desc">Diseñamos e instalamos sistemas de cableado estructurado, fibra óptica y ordenamiento de racks. Garantizamos redes veloces, estables y preparadas para el futuro.</p>
+                <div class="hero-actions">
+                    <a href="#cotizador" class="btn-primary" id="btn-hero-calc">
+                        <span data-i18n="hero_btn_calc">Cotizar Red</span>
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
+                    </a>
+                    <a href="#servicios" class="btn-secondary" id="btn-hero-more" data-i18n="hero_btn_more">Explorar Servicios</a>
+                </div>
+            </div>
+            <div class="hero-visual">
+                <div class="tech-sphere">
+                    <canvas id="sphere-canvas" width="320" height="320"></canvas>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Sección de Servicios -->
+    <section id="servicios">
+        <div class="section-header">
+            <span class="section-tag" id="services-tag" data-i18n="services_tag">Nuestras Especialidades</span>
+            <h2 class="section-title" id="services-headline" data-i18n="services_title">Soluciones de <span>Red a Medida</span></h2>
+            <p class="section-desc" id="services-description" data-i18n="services_desc">Desde pequeñas oficinas hasta centros de datos masivos, cubrimos todo el ciclo de diseño, cableado e implementación.</p>
+        </div>
+        
+        <div class="services-grid">
+            <!-- Servicio 1 -->
+            <div class="service-card" id="service-card-cabling">
+                <div class="service-card-content">
+                    <h3 data-i18n="service_cabling_title">Cableado Estructurado y Fibra Óptica</h3>
+                    <p data-i18n="service_cabling_desc">Fusión de fibra, certificación de red, tomas de usuario y tendido UTP/FTP en Cat 6/6A.</p>
+                </div>
+                <div class="service-card-image">
+                    <picture>
+                        <source srcset="assets/service_cabling.jpeg">
+                        <source srcset="assets/service_cabling.jpg">
+                        <img src="assets/service_cabling.jpeg" alt="Cableado Estructurado y Fibra Óptica" onerror="if(!this.dataset.retry){this.dataset.retry=1;this.src='assets/service_cabling.jpg';}">
+                    </picture>
+                </div>
+            </div>
+            
+            <!-- Servicio 2 -->
+            <div class="service-card" id="service-card-fiber">
+                <div class="service-card-content">
+                    <h3 data-i18n="service_fiber_title">Infraestructura de Data Center y Racks</h3>
+                    <p data-i18n="service_fiber_desc">Confinamiento de pasillos (frío/caliente), peinado/organización de armarios y canalizaciones metálicas o PVC.</p>
+                </div>
+                <div class="service-card-image">
+                    <img src="assets/service_datacenter.jpg" alt="Infraestructura de Data Center y Racks">
+                </div>
+            </div>
+            
+            <!-- Servicio 3 -->
+            <div class="service-card" id="service-card-racks">
+                <div class="service-card-content">
+                    <h3 data-i18n="service_racks_title">Electricidad y BMS</h3>
+                    <p data-i18n="service_racks_desc">PDU inteligentes, cableado de control de entorno, respaldo energético (SAI/UPS) y cuadros eléctricos.</p>
+                </div>
+                <div class="service-card-image">
+                    <img src="assets/service_electricity.jpg" alt="Electricidad y BMS">
+                </div>
+            </div>
+            
+            <!-- Servicio 4 -->
+            <div class="service-card" id="service-card-wifi">
+                <div class="service-card-content">
+                    <h3 data-i18n="service_wifi_title">Seguridad y Control de Acceso</h3>
+                    <p data-i18n="service_wifi_desc">Redes de CCTV IP, control de presencia/acceso e integración de alarmas.</p>
+                </div>
+                <div class="service-card-image">
+                    <img src="assets/service_security.jpg" alt="Seguridad y Control de Acceso">
+                </div>
+            </div>
+
+            <!-- Servicio 5 -->
+            <div class="service-card" id="service-card-solar">
+                <div class="service-card-content">
+                    <h3 data-i18n="service_solar_title">Paneles Solares y Autoconsumo</h3>
+                    <p data-i18n="service_solar_desc">Instalación de sistemas fotovoltaicos de alto rendimiento, inversores solares y canalización para el autoconsumo empresarial.</p>
+                </div>
+                <div class="service-card-image">
+                    <img src="assets/service_solar.jpg" alt="Paneles Solares y Autoconsumo">
+                </div>
+            </div>
+
+            <!-- Servicio 6 -->
+            <div class="service-card" id="service-card-megafonia">
+                <div class="service-card-content">
+                    <h3 data-i18n="service_megafonia_title">Megafonía</h3>
+                    <p data-i18n="service_megafonia_desc">Sistemas de megafonía IP distribuida, sonorización de recintos y megafonía de seguridad certificada.</p>
+                </div>
+                <div class="service-card-image">
+                    <img src="assets/service_megafonia.jpg" alt="Megafonía">
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Sección de Galería Interactiva (Carrusel de Racks y Proyectos) -->
+    <section id="galeria">
+        <div class="section-header">
+            <span class="section-tag" id="gallery-tag" data-i18n="gallery_tag">Casos de Éxito</span>
+            <h2 class="section-title" id="gallery-headline" data-i18n="gallery_title">Transformación de <span>Redes Caóticas</span></h2>
+            <p class="section-desc" id="gallery-description" data-i18n="gallery_desc">El desorden en los racks causa sobrecalentamiento, caídas de red y fallos críticos. Explore nuestros proyectos reales de organización, peinado e infraestructura de alta gama.</p>
+        </div>
+        
+        <div class="gallery-container">
+            <div class="carousel-container" id="project-carousel" aria-label="Carrusel de proyectos de racks y redes">
+                <!-- Pista de diapositivas -->
+                <div class="carousel-track-wrapper">
+                    <div class="carousel-track" id="carousel-track">
+                        <!-- Diapositiva 1 -->
+                        <div class="carousel-slide active" data-index="0">
+                            <div class="carousel-slide-bg" style="background-image: url('assets/imagen1.jpg');"></div>
+                            <img src="assets/imagen1.jpg" alt="Organización y peinado integral de rack con cableado estructurado" class="carousel-slide-img" loading="lazy">
+                            <div class="carousel-caption">
+                                <p class="carousel-caption-text">Peinado vertical y distribución simétrica de cableado estructurado en rack</p>
+                            </div>
+                        </div>
+                        
+                        <!-- Diapositiva 2 -->
+                        <div class="carousel-slide" data-index="1">
+                            <div class="carousel-slide-bg" style="background-image: url('assets/imagen2.jpg');"></div>
+                            <img src="assets/imagen2.jpg" alt="Switches de alta densidad con patch cords identificados" class="carousel-slide-img" loading="lazy">
+                            <div class="carousel-caption">
+                                <p class="carousel-caption-text">Conexión de switches de alta densidad y rotulación por código de colores</p>
+                            </div>
+                        </div>
+
+                        <!-- Diapositiva 3 -->
+                        <div class="carousel-slide" data-index="2">
+                            <div class="carousel-slide-bg" style="background-image: url('assets/imagen3.jpg');"></div>
+                            <img src="assets/imagen3.jpg" alt="Instalación de armarios rack en sala de Data Center" class="carousel-slide-img" loading="lazy">
+                            <div class="carousel-caption">
+                                <p class="carousel-caption-text">Alineación y montaje de bastidores en sala técnica de servidores</p>
+                            </div>
+                        </div>
+
+                        <!-- Diapositiva 4 -->
+                        <div class="carousel-slide" data-index="3">
+                            <div class="carousel-slide-bg" style="background-image: url('assets/imagen4.jpg');"></div>
+                            <img src="assets/imagen4.jpg" alt="Tendido y organización de mazos de cable troncal" class="carousel-slide-img" loading="lazy">
+                            <div class="carousel-caption">
+                                <p class="carousel-caption-text">Tendido de cableado troncal Cat6A y preparación previa de peinado</p>
+                            </div>
+                        </div>
+
+                        <!-- Diapositiva 5 -->
+                        <div class="carousel-slide" data-index="4">
+                            <div class="carousel-slide-bg" style="background-image: url('assets/imagen5.jpg');"></div>
+                            <img src="assets/imagen5.jpg" alt="Terminación milimétrica en paneles de parcheo" class="carousel-slide-img" loading="lazy">
+                            <div class="carousel-caption">
+                                <p class="carousel-caption-text">Fijación en bandejas de parcheo con bridados y etiquetado individual</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Botones de Navegación -->
+                <button class="carousel-btn prev-btn" id="carousel-prev" aria-label="Imagen anterior">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                        <polyline points="15 18 9 12 15 6"></polyline>
+                    </svg>
+                </button>
+                <button class="carousel-btn next-btn" id="carousel-next" aria-label="Imagen siguiente">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                        <polyline points="9 18 15 12 9 6"></polyline>
+                    </svg>
+                </button>
+
+                <!-- Barra inferior con contador numérico y puntos indicadores -->
+                <div class="carousel-footer">
+                    <div class="carousel-counter" id="carousel-counter">
+                        <span id="current-slide-num">1</span> / <span id="total-slides-num">5</span>
+                    </div>
+                    <div class="carousel-dots" id="carousel-dots">
+                        <button class="carousel-dot active" data-slide="0" aria-label="Ir a Imagen 1"></button>
+                        <button class="carousel-dot" data-slide="1" aria-label="Ir a Imagen 2"></button>
+                        <button class="carousel-dot" data-slide="2" aria-label="Ir a Imagen 3"></button>
+                        <button class="carousel-dot" data-slide="3" aria-label="Ir a Imagen 4"></button>
+                        <button class="carousel-dot" data-slide="4" aria-label="Ir a Imagen 5"></button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Sección Conócenos (Mapa Internacional) -->
+    <section id="conocenos">
+        <div class="section-header">
+            <span class="section-tag" id="about-tag" data-i18n="about_tag">Nuestra Trayectoria</span>
+            <h2 class="section-title" id="about-headline" data-i18n="about_title">Presencia <span>Internacional</span></h2>
+            <p class="section-desc" id="about-description" data-i18n="about_desc">RACON ha llevado su experiencia en conectividad e infraestructura de red a múltiples países de Europa.</p>
+        </div>
+        
+        <div class="about-grid">
+            <!-- Panel de Descripción de la Empresa (Izquierda) -->
+            <div class="about-brand-panel">
+                <h3 class="about-brand-title" data-i18n="about_brand_title">Conectividad sin Fronteras</h3>
+                <p class="about-brand-text" data-i18n="about_brand_text">RACON es una empresa líder en telecomunicaciones y conectividad corporativa, especializada en soluciones avanzadas de cableado estructurado, fibra óptica y ordenamiento de racks. Diseñamos e instalamos infraestructuras de red robustas y certificadas que garantizan el máximo rendimiento y estabilidad para su negocio.</p>
+                <p class="about-brand-text-foot" data-i18n="about_brand_text_foot">Nuestra alta capacidad técnica y calidad de servicio nos han consolidado como un socio de confianza a nivel internacional, habiendo ejecutado con éxito proyectos de infraestructura crítica en España, Bélgica, Holanda, Polonia, Croacia y Noruega.</p>
+            </div>
+
+            <!-- Contenedor del Mapa Leaflet (Derecha) -->
+            <div class="about-map-container">
+                <div id="map"></div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Sección Cotizador Interactivo -->
+    <section id="cotizador">
+        <div class="section-header">
+            <span class="section-tag" id="calc-tag" data-i18n="calc_tag">Presupuesto Rápido</span>
+            <h2 class="section-title" id="calc-headline" data-i18n="calc_title">Diseñe y Cotice <span>su Red</span></h2>
+            <p class="section-desc" id="calc-description" data-i18n="calc_desc">Estime al instante el costo de los materiales e instalación. Ajuste los parámetros y solicite una propuesta formal.</p>
+        </div>
+        
+        <div class="calculator-grid">
+            <!-- Panel de Entrada de Datos -->
+            <div class="calc-panel">
+                <!-- Grupo 1: Número de Nodos/Puntos de red -->
+                <div class="calc-group">
+                    <label class="calc-label" for="nodes-input">
+                        <span data-i18n="calc_label_nodes">Puntos de Red (Nodos)</span>
+                        <span id="nodes-val-display">25 puntos</span>
+                    </label>
+                    <input type="range" id="nodes-input" class="range-slider" min="5" max="150" value="25">
+                </div>
+
+                <!-- Grupo 1.5: Distancia promedio por Punto de Red -->
+                <div class="calc-group">
+                    <label class="calc-label" for="distance-input">
+                        <span data-i18n="calc_label_distance">Distancia Promedio por Punto</span>
+                        <span id="distance-val-display">40 metros</span>
+                    </label>
+                    <input type="range" id="distance-input" class="range-slider" min="10" max="100" value="40">
+                </div>
+                
+                <!-- Grupo 2: Categoría de Cableado -->
+                <div class="calc-group">
+                    <label class="calc-label" for="category-select">
+                        <span data-i18n="calc_label_category">Categoría de Cable</span>
+                    </label>
+                    <select id="category-select" class="calc-select">
+                        <option value="cat6" selected data-i18n="calc_opt_cat6">Categoría 6 UTP (Hasta 1 Gbps)</option>
+                        <option value="cat6a" data-i18n="calc_opt_cat6a">Categoría 6A F/UTP (Hasta 10 Gbps + Blindaje)</option>
+                        <option value="fiber" data-i18n="calc_opt_fiber">Fibra Óptica Multimodo (Alta Distancia / Backbone)</option>
+                    </select>
+                </div>
+                
+                <!-- Grupo 3: Adicionales / Checkboxes -->
+                <div class="calc-group">
+                    <label class="calc-label">
+                        <span data-i18n="calc_label_services">Servicios Integrados</span>
+                    </label>
+                    <div class="options-grid">
+                        <!-- Opción 1: Organizar Rack -->
+                        <div class="checkbox-card" id="option-card-rack">
+                            <input type="checkbox" id="opt-rack" checked>
+                            <div class="checkbox-info">
+                                <span class="checkbox-title" data-i18n="calc_cb_rack_title">Rack & Patch Panels</span>
+                                <span class="checkbox-desc" data-i18n="calc_cb_rack_desc">Suministro e instalación de armario de red y paneles.</span>
+                            </div>
+                        </div>
+                        
+                        <!-- Opción 2: Certificación de Red -->
+                        <div class="checkbox-card" id="option-card-cert">
+                            <input type="checkbox" id="opt-cert">
+                            <div class="checkbox-info">
+                                <span class="checkbox-title" data-i18n="calc_cb_cert_title">Certificación Fluke Networks</span>
+                                <span class="checkbox-desc" data-i18n="calc_cb_cert_desc">Pruebas físicas y reporte de cumplimiento de norma TIA/EIA.</span>
+                            </div>
+                        </div>
+                        
+                        <!-- Opción 3: Canalización / Tubería -->
+                        <div class="checkbox-card" id="option-card-tub">
+                            <input type="checkbox" id="opt-tub">
+                            <div class="checkbox-info">
+                                <span class="checkbox-title" data-i18n="calc_cb_tub_title">Canalización PVC / Escalerilla</span>
+                                <span class="checkbox-desc" data-i18n="calc_cb_tub_desc">Tuberías y canaletas superficiales para proteger el cableado.</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Panel de Resultados de Cotización -->
+            <div class="calc-result">
+                <div>
+                    <div class="result-header">
+                        <h3 class="result-title" data-i18n="calc_res_title">Estimación del Proyecto</h3>
+                        <div class="result-price">
+                            <span>EUR</span>
+                            <span id="total-price-display">1,650</span>
+                        </div>
+                    </div>
+                    
+                    <ul class="result-summary">
+                        <li class="result-item">
+                            <span data-i18n="calc_res_points">Puntos de red e instalación básica:</span>
+                            <span id="sum-base">€625.00</span>
+                        </li>
+                        <li class="result-item">
+                            <span data-i18n="calc_res_meters">Cable estimado total:</span>
+                            <span id="sum-meters">1,000 m</span>
+                        </li>
+                        <li class="result-item">
+                            <span data-i18n="calc_res_cable_cost">Costo de cable (Seleccionado):</span>
+                            <span id="sum-cable">Cat6 UTP (€650.00)</span>
+                        </li>
+                        <li class="result-item">
+                            <span data-i18n="calc_res_cabinet">Armario & Racks:</span>
+                            <span id="sum-rack">Incluido (€375.00)</span>
+                        </li>
+                        <li class="result-item">
+                            <span data-i18n="calc_res_cert">Certificación e informes:</span>
+                            <span id="sum-cert">No solicitado</span>
+                        </li>
+                        <li class="result-item">
+                            <span data-i18n="calc_res_conduits">Canalizaciones adicionales:</span>
+                            <span id="sum-tub">No solicitado</span>
+                        </li>
+                    </ul>
+
+                    <div class="cable-comparison">
+                        <h4 data-i18n="calc_comp_title">Comparativa de Cable por Categoría</h4>
+                        <div class="comp-row" id="comp-row-cat6">
+                            <span>Cat6 UTP (€0.65/m):</span>
+                            <span id="comp-cat6">€650.00</span>
+                        </div>
+                        <div class="comp-row" id="comp-row-cat6a">
+                            <span>Cat6A F/UTP (€0.70/m):</span>
+                            <span id="comp-cat6a">€700.00</span>
+                        </div>
+                        <div class="comp-row" id="comp-row-fiber">
+                            <span>Fibra Multimodo (€1.70/m):</span>
+                            <span id="comp-fiber">€1,700.00</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="result-footer">
+                    <button class="btn-primary" id="btn-calc-request" onclick="location.href='#contacto'" data-i18n="calc_btn_request">
+                        Solicitar Presupuesto Formal
+                    </button>
+                    <span data-i18n="calc_note">*Los costos mostrados son de referencia estimada para mano de obra y materiales estándar en base al número de nodos.</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Sección de Contacto -->
+    <section id="contacto">
+        <div class="section-header">
+            <span class="section-tag" id="contact-tag" data-i18n="contact_tag">Atención Inmediata</span>
+            <h2 class="section-title" id="contact-headline" data-i18n="contact_title">Hablemos de su <span>Próximo Proyecto</span></h2>
+            <p class="section-desc" id="contact-description" data-i18n="contact_desc">Háganos saber sus requerimientos de infraestructura y le responderemos con una propuesta técnica en menos de 24 horas.</p>
+        </div>
+        
+        <div class="contact-grid">
+            <div class="contact-info">
+                <!-- Teléfono -->
+                <div class="info-item">
+                    <div class="info-icon">
+                        <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M6.62 10.79c1.44 2.83 3.76 5.14 6.59 6.59l2.2-2.2c.27-.27.67-.36 1.02-.24 1.12.37 2.33.57 3.57.57.55 0 1 .45 1 1V20c0 .55-.45 1-1 1-9.39 0-17-7.61-17-17 0-.55.45-1 1-1h3.5c.55 0 1 .45 1 1 0 1.25.2 2.45.57 3.57.11.35.03.74-.25 1.02l-2.2 2.2z"/>
+                        </svg>
+                    </div>
+                    <div class="info-text">
+                        <h4 data-i18n="contact_label_phone">Teléfono</h4>
+                        <p><a href="tel:+34627837298">+34 627 83 72 98</a></p>
+                        <p data-i18n="contact_val_phone_schedule">Lunes a Viernes (8:00 AM - 5:00 PM)</p>
+                    </div>
+                </div>
+                
+                <!-- Email -->
+                <div class="info-item">
+                    <div class="info-icon">
+                        <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M20 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z"/>
+                        </svg>
+                    </div>
+                    <div class="info-text">
+                        <h4 data-i18n="contact_label_email">Correo Electrónico</h4>
+                        <p><a href="mailto:raconingenieria@hotmail.com">raconingenieria@hotmail.com</a></p>
+                        <p data-i18n="contact_val_email_desc">Atención directa para cotizaciones y licitaciones.</p>
+                    </div>
+                </div>
+                
+                <!-- Dirección -->
+                <div class="info-item">
+                    <div class="info-icon">
+                        <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/>
+                        </svg>
+                    </div>
+                    <div class="info-text">
+                        <h4 data-i18n="contact_label_location">Ubicación</h4>
+                        <p>Madrid, 28982</p>
+                        <p data-i18n="contact_val_location_country">España</p>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="contact-form-panel">
+                <form id="contact-form" onsubmit="return false;">
+                    <div class="form-group">
+                        <label class="form-label" for="form-name" data-i18n="form_label_name">Nombre Completo</label>
+                        <input type="text" id="form-name" class="form-input" data-i18n-placeholder="form_placeholder_name" placeholder="Ej. Juan Pérez" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label class="form-label" for="form-email" data-i18n="form_label_email">Correo Electrónico</label>
+                        <input type="email" id="form-email" class="form-input" data-i18n-placeholder="form_placeholder_email" placeholder="Ej. juan@empresa.com" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label class="form-label" for="form-desc" data-i18n="form_label_desc">Detalles del Proyecto / Estimación de Red</label>
+                        <textarea id="form-desc" class="form-textarea" data-i18n-placeholder="form_placeholder_desc" placeholder="Describa brevemente su requerimiento (ej: instalación en nueva oficina, reordenamiento de rack, etc.)" required></textarea>
+                    </div>
+                    
+                    <button type="submit" class="btn-primary form-submit-btn" id="btn-form-submit">
+                        <span data-i18n="form_btn_send">Enviar Consulta</span>
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="22" y1="2" x2="11" y2="13"></line><polygon points="22 2 15 22 11 13 2 9 22 2"></polygon></svg>
+                    </button>
+                    
+                    <div id="form-alert" class="form-message success">
+                        <!-- Este mensaje se maneja dinámicamente con JS dependiendo del éxito de la petición AJAX -->
+                    </div>
+                </form>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <div class="footer-container">
+            <div class="footer-about">
+                <a href="#" class="logo">
+                    <img src="assets/logo.png?v=1.6" alt="RACON INGENIERÍA" class="logo-img" width="66" height="34">
+                    RACON <span>INGENIERÍA</span>
+                </a>
+                <p data-i18n="footer_desc">Especialistas líderes en infraestructuras de red robustas, peinado de racks, cableado de alto desempeño y enlaces troncales de telecomunicación empresarial.</p>
+            </div>
+            
+            <div>
+                <h4 class="footer-title" data-i18n="footer_title_links">Enlaces</h4>
+                <ul class="footer-links">
+                    <li><a href="#inicio" data-i18n="nav_home">Inicio</a></li>
+                    <li><a href="#servicios" data-i18n="nav_services">Servicios</a></li>
+                    <li><a href="#galeria" data-i18n="nav_racks">Racks de Red</a></li>
+                    <li><a href="#conocenos" data-i18n="nav_about">Conócenos</a></li>
+                </ul>
+            </div>
+            
+            <div>
+                <h4 class="footer-title" data-i18n="footer_title_services">Servicios</h4>
+                <ul class="footer-links">
+                    <li><a href="#servicios" data-i18n="footer_link_cabling">Cableado Estructurado</a></li>
+                    <li><a href="#servicios" data-i18n="footer_link_fiber">Fusión de Fibra Óptica</a></li>
+                    <li><a href="#servicios" data-i18n="footer_link_racks">Peinado de Racks</a></li>
+                    <li><a href="#servicios" data-i18n="footer_link_cctv">CCTV e IP Security</a></li>
+                    <li><a href="#servicios" data-i18n="footer_link_solar">Paneles Solares</a></li>
+                    <li><a href="#servicios" data-i18n="footer_link_megafonia">Megafonía IP</a></li>
+                </ul>
+            </div>
+            
+            <div>
+                <h4 class="footer-title" data-i18n="footer_title_legal">Legal</h4>
+                <ul class="footer-links">
+                    <li><a href="#" data-i18n="footer_link_terms">Términos de Servicio</a></li>
+                    <li><a href="#" data-i18n="footer_link_privacy">Política de Privacidad</a></li>
+                    <li><a href="#" data-i18n="footer_link_warranty">Garantía de Red (Fluke)</a></li>
+                </ul>
+            </div>
+        </div>
+        
+        <div class="footer-bottom">
+            <p>&copy; <span id="current-year">2026</span> <span data-i18n="footer_copyright">RACON Soluciones de Telecomunicación. Todos los derechos reservados.</span></p>
+        </div>
+    </footer>
+
+    <!-- Leaflet.js Map JS -->
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+    <!-- Script de Traducciones e Internacionalización -->
+    <script src="translations.js?v=2.5"></script>
+    <!-- Script de Lógica Interactiva -->
+    <script src="app.js?v=2.5"></script>
+
+    <!-- Botón Flotante de WhatsApp -->
+    <a href="https://wa.me/34627837298" class="whatsapp-float" target="_blank" rel="noopener noreferrer" aria-label="Contactar por WhatsApp">
+        <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+            <path d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946C.06 5.348 5.397.01 12.008.01c3.202.001 6.212 1.246 8.477 3.514 2.266 2.268 3.507 5.28 3.505 8.484-.004 6.657-5.34 11.997-11.953 11.997-2.005-.001-3.973-.502-5.724-1.455L0 24zm6.59-4.846c1.6.95 3.188 1.449 4.825 1.451 5.436 0 9.86-4.37 9.864-9.799.002-2.63-1.023-5.101-2.885-6.963C16.528 2.025 14.09 1 11.99 1c-5.45 0-9.875 4.374-9.879 9.803-.002 1.758.465 3.479 1.355 5.027l-.988 3.606 3.73-.978zm11.233-6.04c-.3-.15-1.771-.875-2.046-.975-.276-.1-.476-.15-.676.15-.2.3-.775.975-.95 1.175-.175.2-.35.225-.65.075-.3-.15-1.267-.467-2.414-1.492-.893-.797-1.495-1.78-1.67-2.08-.175-.3-.019-.462.13-.61.135-.133.3-.35.45-.525.15-.175.2-.3.3-.5s.05-.375-.025-.525c-.075-.15-.676-1.63-.926-2.235-.244-.589-.492-.51-.676-.518-.174-.007-.375-.007-.575-.007-.2 0-.525.075-.8.375-.275.3-1.05 1.025-1.05 2.5s1.075 2.9 1.225 3.1c.15.2 2.113 3.227 5.12 4.527.714.31 1.272.495 1.706.633.717.227 1.37.195 1.887.118.575-.085 1.771-.725 2.021-1.425.25-.7.25-1.3.175-1.425-.075-.125-.275-.2-.575-.35z" fill="#fff"/>
+        </svg>
+    </a>
+</body>
+</html>
