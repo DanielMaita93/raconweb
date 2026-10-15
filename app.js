@@ -617,11 +617,9 @@ contactForm.addEventListener('submit', (e) => {
     const name = document.getElementById('form-name').value.trim();
     const email = document.getElementById('form-email').value.trim();
     const phone = document.getElementById('form-phone') ? document.getElementById('form-phone').value.trim() : '';
-    const deptSelect = document.getElementById('form-dept');
-    const department = deptSelect ? deptSelect.value : 'Cotizaciones y Ventas';
     const description = document.getElementById('form-desc').value.trim();
 
-    const clientData = { name, email, phone, department, description };
+    const clientData = { name, email, phone, description };
 
     // MODO DE EJECUCIÓN DEL CLIENTE:
     // - 'testing': Envía de forma directa al API de Web3Forms desde el navegador del usuario (evita bloqueos de IP del servidor Hostinger).
@@ -636,9 +634,8 @@ contactForm.addEventListener('submit', (e) => {
             name: name,
             email: email,
             phone: phone || 'No proporcionado',
-            department: department,
-            subject: (currentLang === 'en' ? 'RACON INGENIERIA - Quote Request: ' : 'RACON INGENIERIA - Solicitud de Presupuesto: ') + `[${department}] ` + name,
-            message: `Cliente: ${name}\nDepartamento: ${department}\nEmail de contacto: ${email}\nTeléfono: ${phone || 'No proporcionado'}\n\n-------------------------\nDETALLE DEL PRESUPUESTO:\n-------------------------\n${description}`,
+            subject: (currentLang === 'en' ? 'RACON INGENIERIA - Quote Request: ' : 'RACON INGENIERIA - Solicitud de Presupuesto: ') + name,
+            message: `Cliente: ${name}\nEmail de contacto: ${email}\nTeléfono: ${phone || 'No proporcionado'}\n\n-------------------------\nDETALLE DEL PRESUPUESTO:\n-------------------------\n${description}`,
             from_name: 'RACON INGENIERIA Web'
         };
 
@@ -682,7 +679,6 @@ contactForm.addEventListener('submit', (e) => {
         formData.append('name', name);
         formData.append('email', email);
         formData.append('phone', phone);
-        formData.append('department', department);
         formData.append('description', description);
         formData.append('lang', currentLang);
 
@@ -724,7 +720,6 @@ function showContactSuccessCard(clientData) {
 
     // Construcción del mensaje pre-armado de WhatsApp
     let waText = `*SOLICITUD DE COTIZACIÓN - RACON INGENIERÍA*\n`;
-    waText += `*Departamento:* ${clientData.department}\n`;
     waText += `*Cliente:* ${clientData.name}\n`;
     waText += `*Email:* ${clientData.email}\n`;
     if (clientData.phone) {
@@ -743,12 +738,8 @@ function showContactSuccessCard(clientData) {
                 <div class="contact-success-icon">&#10004;</div>
                 <div>
                     <h4 class="contact-success-title">${t.contact_success_title || '¡Solicitud de Cotización Recibida!'}</h4>
-                    <p class="contact-success-subtitle">${t.contact_success_subtitle || 'Su requerimiento técnico ha sido enviado a nuestro equipo por correo. Para una atención inmediata, elija cómo desea comunicarse ahora:'}</p>
+                    <p class="contact-success-subtitle">${t.contact_success_subtitle || 'Tu solicitud técnica ya está en el sistema. Para resolverlo juntos en este instante y darte atención prioritaria, comunícate con nosotros por cualquiera de estas dos vías:'}</p>
                 </div>
-            </div>
-            
-            <div class="contact-dept-pill">
-                <span>${t.contact_target_dept || 'Departamento:'}</span> <strong>${clientData.department}</strong>
             </div>
 
             <div class="contact-actions-grid">
@@ -762,7 +753,7 @@ function showContactSuccessCard(clientData) {
                     <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
                         <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/>
                     </svg>
-                    <span>${t.contact_btn_call || 'Llamar al Departamento'}</span>
+                    <span>${t.contact_btn_call || 'Llamada Directa'}</span>
                 </a>
             </div>
         </div>
@@ -770,23 +761,6 @@ function showContactSuccessCard(clientData) {
 
     // Desplazamiento suave para que el usuario vea la tarjeta de contacto
     formAlert.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
-}
-
-// Configurar enlace rápido de WhatsApp antes de enviar
-const quickLinkWa = document.getElementById('quick-link-whatsapp');
-if (quickLinkWa) {
-    quickLinkWa.addEventListener('click', () => {
-        const nameVal = document.getElementById('form-name')?.value.trim();
-        const deptVal = document.getElementById('form-dept')?.value;
-        const descVal = document.getElementById('form-desc')?.value.trim();
-        
-        let msg = `Hola RACON INGENIERÍA.`;
-        if (deptVal) msg += ` Me comunico con el departamento de ${deptVal}.`;
-        if (nameVal) msg += ` Mi nombre es ${nameVal}.`;
-        if (descVal) msg += `\n\nConsulta:\n${descVal}`;
-        
-        quickLinkWa.href = `https://wa.me/34627837298?text=${encodeURIComponent(msg)}`;
-    });
 }
 
 // ==========================================

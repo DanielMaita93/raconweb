@@ -370,31 +370,20 @@ debes hacer los siguientes 3 ajustes sencillos en los archivos de la web:
             
             <div class="contact-form-panel">
                 <form id="contact-form" onsubmit="return false;">
-                    <div class="form-row-2col">
-                        <div class="form-group">
-                            <label class="form-label" for="form-name" data-i18n="form_label_name">Nombre Completo</label>
-                            <input type="text" id="form-name" class="form-input" data-i18n-placeholder="form_placeholder_name" placeholder="Ej. Juan Pérez" required>
-                        </div>
-                        
-                        <div class="form-group">
-                            <label class="form-label" for="form-email" data-i18n="form_label_email">Correo Electrónico</label>
-                            <input type="email" id="form-email" class="form-input" data-i18n-placeholder="form_placeholder_email" placeholder="Ej. juan@empresa.com" required>
-                        </div>
+                    <div class="form-group">
+                        <label class="form-label" for="form-name" data-i18n="form_label_name">Nombre Completo</label>
+                        <input type="text" id="form-name" class="form-input" data-i18n-placeholder="form_placeholder_name" placeholder="Ej. Juan Pérez" required>
                     </div>
 
                     <div class="form-row-2col">
                         <div class="form-group">
-                            <label class="form-label" for="form-phone" data-i18n="form_label_phone">Teléfono / WhatsApp</label>
-                            <input type="tel" id="form-phone" class="form-input" data-i18n-placeholder="form_placeholder_phone" placeholder="Ej. +34 627 83 72 98">
+                            <label class="form-label" for="form-email" data-i18n="form_label_email">Correo Electrónico</label>
+                            <input type="email" id="form-email" class="form-input" data-i18n-placeholder="form_placeholder_email" placeholder="Ej. juan@empresa.com" required>
                         </div>
 
                         <div class="form-group">
-                            <label class="form-label" for="form-dept" data-i18n="form_label_dept">Departamento a Contactar</label>
-                            <select id="form-dept" class="form-input form-select">
-                                <option value="Cotizaciones y Ventas" data-i18n="form_dept_sales">Cotizaciones y Nuevos Proyectos (Ventas)</option>
-                                <option value="Ingeniería y Cableado" data-i18n="form_dept_engineering">Ingeniería y Cableado Estructurado</option>
-                                <option value="Soporte Técnico" data-i18n="form_dept_support">Soporte Técnico y Mantenimiento</option>
-                            </select>
+                            <label class="form-label" for="form-phone" data-i18n="form_label_phone">Teléfono / WhatsApp</label>
+                            <input type="tel" id="form-phone" class="form-input" data-i18n-placeholder="form_placeholder_phone" placeholder="Ej. +34 627 83 72 98">
                         </div>
                     </div>
                     
@@ -402,27 +391,9 @@ debes hacer los siguientes 3 ajustes sencillos en los archivos de la web:
                         <label class="form-label" for="form-desc" data-i18n="form_label_desc">Detalles del Proyecto</label>
                         <textarea id="form-desc" class="form-textarea" data-i18n-placeholder="form_placeholder_desc" placeholder="Describa brevemente su requerimiento (ej: instalación en nueva oficina, reordenamiento de rack, etc.)" required></textarea>
                     </div>
-
-                    <div class="contact-quick-direct">
-                        <span data-i18n="contact_or_direct">O bien, comuníquese directamente antes de enviar:</span>
-                        <div class="quick-direct-links">
-                            <a href="https://wa.me/34627837298" target="_blank" rel="noopener noreferrer" class="quick-link-pill whatsapp" id="quick-link-whatsapp">
-                                <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor">
-                                    <path d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946C.06 5.348 5.397.01 12.008.01c3.202.001 6.212 1.246 8.477 3.514 2.266 2.268 3.507 5.28 3.505 8.484-.004 6.657-5.34 11.997-11.953 11.997-2.005-.001-3.973-.502-5.724-1.455L0 24zm6.59-4.846c1.6.95 3.188 1.449 4.825 1.451 5.436 0 9.86-4.37 9.864-9.799.002-2.63-1.023-5.101-2.885-6.963C16.528 2.025 14.09 1 11.99 1c-5.45 0-9.875 4.374-9.879 9.803-.002 1.758.465 3.479 1.355 5.027l-.988 3.606 3.73-.978zm11.233-6.04c-.3-.15-1.771-.875-2.046-.975-.276-.1-.476-.15-.676.15-.2.3-.775.975-.95 1.175-.175.2-.35.225-.65.075-.3-.15-1.267-.467-2.414-1.492-.893-.797-1.495-1.78-1.67-2.08-.175-.3-.019-.462.13-.61.135-.133.3-.35.45-.525.15-.175.2-.3.3-.5s.05-.375-.025-.525c-.075-.15-.676-1.63-.926-2.235-.244-.589-.492-.51-.676-.518-.174-.007-.375-.007-.575-.007-.2 0-.525.075-.8.375-.275.3-1.05 1.025-1.05 2.5s1.075 2.9 1.225 3.1c.15.2 2.113 3.227 5.12 4.527.714.31 1.272.495 1.706.633.717.227 1.37.195 1.887.118.575-.085 1.771-.725 2.021-1.425.25-.7.25-1.3.175-1.425-.075-.125-.275-.2-.575-.35z"/>
-                                </svg>
-                                WhatsApp
-                            </a>
-                            <a href="tel:+34627837298" class="quick-link-pill call">
-                                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
-                                    <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/>
-                                </svg>
-                                +34 627 83 72 98
-                            </a>
-                        </div>
-                    </div>
                     
                     <button type="submit" class="btn-primary form-submit-btn" id="btn-form-submit">
-                        <span data-i18n="form_btn_send">Enviar Consulta y Conectar</span>
+                        <span data-i18n="form_btn_send">Enviar Consulta</span>
                         <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="22" y1="2" x2="11" y2="13"></line><polygon points="22 2 15 22 11 13 2 9 22 2"></polygon></svg>
                     </button>
                     
@@ -604,15 +575,6 @@ debes hacer los siguientes 3 ajustes sencillos en los archivos de la web:
                     <li><a href="#servicios" data-i18n="footer_link_cctv">CCTV e IP Security</a></li>
                     <li><a href="#servicios" data-i18n="footer_link_solar">Paneles Solares</a></li>
                     <li><a href="#servicios" data-i18n="footer_link_megafonia">Megafonía IP</a></li>
-                </ul>
-            </div>
-            
-            <div>
-                <h4 class="footer-title" data-i18n="footer_title_legal">Legal</h4>
-                <ul class="footer-links">
-                    <li><a href="#" data-i18n="footer_link_terms">Términos de Servicio</a></li>
-                    <li><a href="#" data-i18n="footer_link_privacy">Política de Privacidad</a></li>
-                    <li><a href="#" data-i18n="footer_link_warranty">Garantía de Red (Fluke)</a></li>
                 </ul>
             </div>
         </div>

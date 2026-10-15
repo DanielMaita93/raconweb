@@ -97,13 +97,11 @@ const translations = {
         "form_dept_support": "Soporte Técnico y Mantenimiento",
         "form_label_desc": "Detalles del Proyecto",
         "form_placeholder_desc": "Describa brevemente su requerimiento (ej: instalación en nueva oficina, reordenamiento de rack, etc.)",
-        "form_btn_send": "Enviar Consulta y Conectar",
+        "form_btn_send": "Enviar Consulta",
         "contact_success_title": "¡Solicitud de Cotización Recibida!",
-        "contact_success_subtitle": "Su requerimiento técnico ha sido enviado a nuestro equipo por correo. Para una atención inmediata, elija cómo desea comunicarse ahora:",
+        "contact_success_subtitle": "Tu solicitud técnica ya está en el sistema. Para resolverlo juntos en este instante y darte atención prioritaria, comunícate con nosotros por cualquiera de estas dos vías:",
         "contact_btn_whatsapp": "Abrir Chat de WhatsApp",
-        "contact_btn_call": "Llamar al Departamento",
-        "contact_target_dept": "Departamento:",
-        "contact_or_direct": "O bien, comuníquese directamente antes de enviar:",
+        "contact_btn_call": "Llamada Directa",
 
         // Footer
         "footer_desc": "Especialistas líderes en infraestructuras de red robustas, peinado de racks, cableado de alto desempeño y enlaces troncales de telecomunicación empresarial.",
@@ -295,13 +293,11 @@ const translations = {
         "form_dept_support": "Technical Support & Maintenance",
         "form_label_desc": "Project Details",
         "form_placeholder_desc": "Briefly describe your requirement (e.g. installation in new office, rack organization, etc.)",
-        "form_btn_send": "Send Inquiry & Connect",
+        "form_btn_send": "Send Inquiry",
         "contact_success_title": "Quote Request Received!",
-        "contact_success_subtitle": "Your technical requirement has been sent to our team by email. For immediate assistance, choose how you want to connect now:",
+        "contact_success_subtitle": "Your technical request is now in our system. To resolve it together right away and receive priority assistance, reach out to us through either of these two channels:",
         "contact_btn_whatsapp": "Open WhatsApp Chat",
-        "contact_btn_call": "Call Department",
-        "contact_target_dept": "Department:",
-        "contact_or_direct": "Or reach out directly before submitting:",
+        "contact_btn_call": "Direct Call",
 
         // Footer
         "footer_desc": "Leading specialists in robust network infrastructures, rack cable dressing, high-performance cabling, and enterprise telecommunication trunks.",

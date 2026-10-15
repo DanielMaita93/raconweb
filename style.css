@@ -1353,65 +1353,6 @@ body.light-mode .tech-sphere::before, body.light-mode .tech-sphere::after {
     padding: 10px;
 }
 
-/* Barra rápida de contacto directo */
-.contact-quick-direct {
-    margin: -8px 0 20px 0;
-    padding: 12px 16px;
-    background: rgba(255, 255, 255, 0.02);
-    border: 1px dashed rgba(255, 255, 255, 0.08);
-    border-radius: 8px;
-    display: flex;
-    flex-wrap: wrap;
-    align-items: center;
-    justify-content: space-between;
-    gap: 10px;
-}
-
-.contact-quick-direct span {
-    font-size: 0.82rem;
-    color: var(--text-muted);
-}
-
-.quick-direct-links {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-}
-
-.quick-link-pill {
-    display: inline-flex;
-    align-items: center;
-    gap: 6px;
-    font-size: 0.8rem;
-    font-weight: 600;
-    padding: 5px 12px;
-    border-radius: 20px;
-    text-decoration: none;
-    transition: var(--transition-fast);
-}
-
-.quick-link-pill.whatsapp {
-    background: rgba(37, 211, 102, 0.15);
-    color: #25D366;
-    border: 1px solid rgba(37, 211, 102, 0.35);
-}
-
-.quick-link-pill.whatsapp:hover {
-    background: #25D366;
-    color: #ffffff;
-}
-
-.quick-link-pill.call {
-    background: rgba(255, 111, 0, 0.12);
-    color: #ff9800;
-    border: 1px solid rgba(255, 111, 0, 0.35);
-}
-
-.quick-link-pill.call:hover {
-    background: var(--primary);
-    color: #ffffff;
-}
-
 /* Caja de Éxito y Conexión Inmediata (WhatsApp & Llamada) */
 .contact-success-card {
     background: linear-gradient(135deg, rgba(16, 185, 129, 0.08) 0%, rgba(14, 19, 34, 0.98) 100%);
@@ -1428,7 +1369,7 @@ body.light-mode .tech-sphere::before, body.light-mode .tech-sphere::after {
     display: flex;
     align-items: flex-start;
     gap: 14px;
-    margin-bottom: 14px;
+    margin-bottom: 20px;
 }
 
 .contact-success-icon {
@@ -1459,20 +1400,6 @@ body.light-mode .tech-sphere::before, body.light-mode .tech-sphere::after {
     color: #cbd5e1;
     line-height: 1.5;
     margin: 0;
-}
-
-.contact-dept-pill {
-    display: inline-flex;
-    align-items: center;
-    gap: 8px;
-    background: rgba(255, 111, 0, 0.12);
-    border: 1px solid rgba(255, 111, 0, 0.4);
-    padding: 6px 14px;
-    border-radius: 20px;
-    font-size: 0.85rem;
-    color: #ff9800;
-    font-weight: 600;
-    margin-bottom: 18px;
 }
 
 .contact-actions-grid {
@@ -1544,7 +1471,7 @@ footer {
     max-width: 1200px;
     margin: 0 auto;
     display: grid;
-    grid-template-columns: 1.5fr repeat(3, 1fr);
+    grid-template-columns: 1.8fr 1fr 1fr;
     gap: 40px;
     margin-bottom: 40px;
 }
