@@ -10,6 +10,7 @@ const translations = {
         "nav_racks": "Racks",
         "nav_calculator": "Cotizador",
         "nav_about": "Conócenos",
+        "nav_reviews": "Reseñas",
         "nav_contact": "Contacto",
         "nav_cta": "Cotizar Ahora",
 
@@ -17,7 +18,7 @@ const translations = {
         "hero_tag": "Infraestructura Confiable",
         "hero_title": "Conectividad de Alta Velocidad para su <span>Empresa</span>",
         "hero_desc": "Diseñamos e instalamos sistemas de cableado estructurado, fibra óptica y ordenamiento de racks. Garantizamos redes veloces, estables y preparadas para el futuro.",
-        "hero_btn_calc": "Cotizar Red",
+        "hero_btn_calc": "Cotizar Proyecto",
         "hero_btn_more": "Explorar Servicios",
 
         // Servicios
@@ -88,9 +89,21 @@ const translations = {
         "form_placeholder_name": "Ej. Juan Pérez",
         "form_label_email": "Correo Electrónico",
         "form_placeholder_email": "Ej. juan@empresa.com",
-        "form_label_desc": "Detalles del Proyecto / Estimación de Red",
+        "form_label_phone": "Teléfono / WhatsApp",
+        "form_placeholder_phone": "Ej. +34 627 83 72 98",
+        "form_label_dept": "Departamento a Contactar",
+        "form_dept_sales": "Cotizaciones y Nuevos Proyectos (Ventas)",
+        "form_dept_engineering": "Ingeniería y Cableado Estructurado",
+        "form_dept_support": "Soporte Técnico y Mantenimiento",
+        "form_label_desc": "Detalles del Proyecto",
         "form_placeholder_desc": "Describa brevemente su requerimiento (ej: instalación en nueva oficina, reordenamiento de rack, etc.)",
-        "form_btn_send": "Enviar Consulta",
+        "form_btn_send": "Enviar Consulta y Conectar",
+        "contact_success_title": "¡Solicitud de Cotización Recibida!",
+        "contact_success_subtitle": "Su requerimiento técnico ha sido enviado a nuestro equipo por correo. Para una atención inmediata, elija cómo desea comunicarse ahora:",
+        "contact_btn_whatsapp": "Abrir Chat de WhatsApp",
+        "contact_btn_call": "Llamar al Departamento",
+        "contact_target_dept": "Departamento:",
+        "contact_or_direct": "O bien, comuníquese directamente antes de enviar:",
 
         // Footer
         "footer_desc": "Especialistas líderes en infraestructuras de red robustas, peinado de racks, cableado de alto desempeño y enlaces troncales de telecomunicación empresarial.",
@@ -140,7 +153,49 @@ const translations = {
         "map_country_netherlands": "Holanda",
         "map_country_poland": "Polonia",
         "map_country_croatia": "Croacia",
-        "map_country_norway": "Noruega"
+        "map_country_norway": "Noruega",
+
+        // Sección de Reseñas y Testimonios
+        "reviews_tag": "Opiniones de Clientes",
+        "reviews_title": "Experiencias de <span>Nuestros Clientes</span>",
+        "reviews_desc": "La satisfacción técnica y el respaldo de empresas líderes avalan cada proyecto de infraestructura y cableado que ejecutamos.",
+        "reviews_badge_score": "4.9 / 5.0",
+        "reviews_badge_sub": "Calificación Media de Clientes",
+        "reviews_badge_projects": "+150 Proyectos de Red",
+        "reviews_badge_satisfaction": "100% Satisfacción Técnica",
+        "reviews_btn_open_modal": "Dejar una Reseña",
+        "reviews_btn_view_all": "Ver todas las reseñas",
+        "reviews_rotation_info": "Lote rotativo de hoy (10 reseñas)",
+        "reviews_btn_see_all_link": "Ver catálogo completo de reseñas y testimonios →",
+        "reviews_verified_badge": "Cliente Verificado",
+        "reviews_empty_msg": "Aún no hay reseñas registradas. ¡Sé el primero en compartir tu experiencia!",
+        
+        // Página Secundaria de Reseñas (Hub)
+        "reviews_hub_title": "Centro de Reseñas y <span>Testimonios</span>",
+        "reviews_hub_subtitle": "Consulte las evaluaciones técnicas y experiencias de clientes corporativos con RACON INGENIERÍA.",
+        "reviews_back_to_main": "Volver al Sitio Principal",
+        "reviews_filter_all": "Todas las Calificaciones",
+        "reviews_filter_5": "5 Estrellas",
+        "reviews_filter_4": "4 Estrellas",
+        "reviews_filter_3_less": "3 o menos",
+        "reviews_search_placeholder": "Buscar por empresa, cargo o palabra clave...",
+        "reviews_showing_count": "Mostrando",
+        "reviews_of": "de",
+        "reviews_total_count": "reseñas corporativas",
+        "reviews_page_seo_title": "Reseñas de Clientes y Casos de Éxito | RACON INGENIERÍA",
+        
+        // Modal de Reseña
+        "reviews_modal_title": "Comparta su Experiencia",
+        "reviews_modal_subtitle": "Su testimonio ayuda a otras empresas a tomar la mejor decisión técnica de infraestructura.",
+        "reviews_form_label_name": "Nombre Completo",
+        "reviews_form_placeholder_name": "Ej. Carlos Méndez",
+        "reviews_form_label_company": "Empresa o Cargo (Opcional)",
+        "reviews_form_placeholder_company": "Ej. Director IT - Data Center Madrid",
+        "reviews_form_label_rating": "Calificación General",
+        "reviews_form_label_comment": "Su Reseña / Opinión",
+        "reviews_form_btn_submit": "Publicar Reseña",
+        "reviews_form_sending": "Verificando y enviando...",
+        "reviews_form_success_pending": "¡Reseña recibida con éxito! Será evaluada por nuestro equipo antes de su publicación."
     },
     en: {
         // SEO
@@ -153,6 +208,7 @@ const translations = {
         "nav_racks": "Racks",
         "nav_calculator": "Estimator",
         "nav_about": "About Us",
+        "nav_reviews": "Reviews",
         "nav_contact": "Contact",
         "nav_cta": "Quote Now",
 
@@ -160,7 +216,7 @@ const translations = {
         "hero_tag": "Reliable Infrastructure",
         "hero_title": "High-Speed Connectivity for your <span>Business</span>",
         "hero_desc": "We design and install structured cabling systems, fiber optics, and rack organization. We guarantee fast, stable, and future-proof networks.",
-        "hero_btn_calc": "Quote Network",
+        "hero_btn_calc": "Quote Project",
         "hero_btn_more": "Explore Services",
 
         // Services
@@ -231,9 +287,21 @@ const translations = {
         "form_placeholder_name": "e.g. John Doe",
         "form_label_email": "Email Address",
         "form_placeholder_email": "e.g. john@company.com",
-        "form_label_desc": "Project Details / Network Estimate",
+        "form_label_phone": "Phone / WhatsApp",
+        "form_placeholder_phone": "e.g. +34 627 83 72 98",
+        "form_label_dept": "Department to Contact",
+        "form_dept_sales": "Quotes & New Projects (Sales)",
+        "form_dept_engineering": "Engineering & Structured Cabling",
+        "form_dept_support": "Technical Support & Maintenance",
+        "form_label_desc": "Project Details",
         "form_placeholder_desc": "Briefly describe your requirement (e.g. installation in new office, rack organization, etc.)",
-        "form_btn_send": "Send Inquiry",
+        "form_btn_send": "Send Inquiry & Connect",
+        "contact_success_title": "Quote Request Received!",
+        "contact_success_subtitle": "Your technical requirement has been sent to our team by email. For immediate assistance, choose how you want to connect now:",
+        "contact_btn_whatsapp": "Open WhatsApp Chat",
+        "contact_btn_call": "Call Department",
+        "contact_target_dept": "Department:",
+        "contact_or_direct": "Or reach out directly before submitting:",
 
         // Footer
         "footer_desc": "Leading specialists in robust network infrastructures, rack cable dressing, high-performance cabling, and enterprise telecommunication trunks.",
@@ -283,6 +351,49 @@ const translations = {
         "map_country_netherlands": "Netherlands",
         "map_country_poland": "Poland",
         "map_country_croatia": "Croatia",
-        "map_country_norway": "Norway"
+        "map_country_norway": "Norway",
+
+        // Reviews & Testimonials Section
+        "reviews_tag": "Client Feedback",
+        "reviews_title": "What <span>Our Clients Say</span>",
+        "reviews_desc": "Technical excellence and the endorsement of leading enterprises back every infrastructure and cabling project we execute.",
+        "reviews_badge_score": "4.9 / 5.0",
+        "reviews_badge_sub": "Average Client Rating",
+        "reviews_badge_projects": "+150 Network Projects",
+        "reviews_badge_satisfaction": "100% Technical Satisfaction",
+        "reviews_btn_open_modal": "Leave a Review",
+        "reviews_btn_view_all": "View all reviews",
+        "reviews_rotation_info": "Today's rotating selection (10 reviews)",
+        "reviews_btn_see_all_link": "View full reviews & testimonials catalog →",
+        "reviews_verified_badge": "Verified Client",
+        "reviews_empty_msg": "No reviews registered yet. Be the first to share your experience!",
+        
+        // Secondary Reviews Page (Hub)
+        "reviews_hub_title": "Reviews & <span>Testimonials</span> Hub",
+        "reviews_hub_subtitle": "Explore technical feedback and experiences from corporate clients with RACON INGENIERÍA.",
+        "reviews_back_to_main": "Back to Main Site",
+        "reviews_filter_all": "All Ratings",
+        "reviews_filter_5": "5 Stars",
+        "reviews_filter_4": "4 Stars",
+        "reviews_filter_3_less": "3 Stars or Less",
+        "reviews_search_placeholder": "Search by company, title, or keyword...",
+        "reviews_showing_count": "Showing",
+        "reviews_of": "of",
+        "reviews_total_count": "enterprise reviews",
+        "reviews_page_seo_title": "Client Reviews & Case Studies | RACON INGENIERÍA",
+        
+        // Review Modal
+        "reviews_modal_title": "Share Your Experience",
+        "reviews_modal_subtitle": "Your feedback helps other businesses make informed technical decisions regarding infrastructure.",
+        "reviews_form_label_name": "Full Name",
+        "reviews_form_placeholder_name": "e.g. Carlos Mendez",
+        "reviews_form_label_company": "Company or Role (Optional)",
+        "reviews_form_placeholder_company": "e.g. IT Director - Madrid Data Center",
+        "reviews_form_label_rating": "Overall Rating",
+        "reviews_form_label_comment": "Your Review / Feedback",
+        "reviews_form_placeholder_comment": "Tell us about the project (cabling neatness, Fluke certification, punctuality, etc.)...",
+        "reviews_form_btn_submit": "Submit Review",
+        "reviews_form_sending": "Verifying and submitting...",
+        "reviews_form_success_pending": "Review submitted successfully! It will be reviewed by our team prior to publication."
     }
 };

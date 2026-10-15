@@ -90,16 +90,16 @@ function setLanguage(lang) {
         }
     }
 
-    // Actualizar cotizador si las funciones ya están definidas
-    if (typeof calculateTotal === 'function') {
-        calculateTotal();
-    }
-
     // Actualizar tooltips del mapa
     if (typeof markersList !== 'undefined' && markersList.length > 0) {
         markersList.forEach(item => {
             item.marker.setTooltipContent(translations[lang][item.country.nameKey]);
         });
+    }
+
+    // Actualizar reseñas si ya están cargadas
+    if (typeof updateReviewsLanguage === 'function') {
+        updateReviewsLanguage();
     }
 }
 
@@ -594,243 +594,12 @@ if (carouselContainer) {
 }
 
 // ==========================================
-// COTIZADOR INTERACTIVO DE RED
-// ==========================================
-const nodesInput = document.getElementById('nodes-input');
-const nodesDisplay = document.getElementById('nodes-val-display');
-const distanceInput = document.getElementById('distance-input');
-const distanceDisplay = document.getElementById('distance-val-display');
-const categorySelect = document.getElementById('category-select');
-
-// Opciones
-const optRack = document.getElementById('opt-rack');
-const optCert = document.getElementById('opt-cert');
-const optTub = document.getElementById('opt-tub');
-
-// Tarjetas contenedoras de checkbox para efecto visual seleccionado
-const optionCardRack = document.getElementById('option-card-rack');
-const optionCardCert = document.getElementById('option-card-cert');
-const optionCardTub = document.getElementById('option-card-tub');
-
-// Visualizadores de Resumen y Total
-const priceDisplay = document.getElementById('total-price-display');
-const sumBaseDisplay = document.getElementById('sum-base');
-const sumMetersDisplay = document.getElementById('sum-meters');
-const sumCableDisplay = document.getElementById('sum-cable');
-const sumRackDisplay = document.getElementById('sum-rack');
-const sumCertDisplay = document.getElementById('sum-cert');
-const sumTubDisplay = document.getElementById('sum-tub');
-
-// Elementos de comparación por categoría
-const compCat6 = document.getElementById('comp-cat6');
-const compCat6a = document.getElementById('comp-cat6a');
-const compFiber = document.getElementById('comp-fiber');
-const compRowCat6 = document.getElementById('comp-row-cat6');
-const compRowCat6a = document.getElementById('comp-row-cat6a');
-const compRowFiber = document.getElementById('comp-row-fiber');
-
-// Lógica de cálculo
-function calculateTotal() {
-    const nodes = parseInt(nodesInput.value);
-    const distance = parseInt(distanceInput.value);
-    const cableType = categorySelect.value;
-    
-    // Traducciones dinámicas
-    const t = translations[currentLang] || translations['es'];
-    
-    nodesDisplay.textContent = `${nodes} ${t.js_points}`;
-    distanceDisplay.textContent = `${distance} ${t.js_meters}`;
-
-    // 1. Costo Base Mano de Obra: $25 por punto de red
-    const baseManoObra = nodes * 25;
-    sumBaseDisplay.textContent = `€${baseManoObra.toFixed(2)}`;
-
-    // 2. Metros de cable y cálculo por categoría
-    const totalMeters = nodes * distance;
-    sumMetersDisplay.textContent = `${totalMeters.toLocaleString()} m`;
-
-    // Tarifas por metro
-    const priceCat6 = 0.65;
-    const priceCat6a = 0.70;
-    const priceFiber = 1.70;
-
-    // Calcular costos totales de cable por categoría
-    const costCat6 = totalMeters * priceCat6;
-    const costCat6a = totalMeters * priceCat6a;
-    const costFiber = totalMeters * priceFiber;
-
-    // Actualizar tabla comparativa en la interfaz
-    compCat6.textContent = `€${costCat6.toFixed(2)}`;
-    compCat6a.textContent = `€${costCat6a.toFixed(2)}`;
-    compFiber.textContent = `€${costFiber.toFixed(2)}`;
-
-    // Resetear fila activa
-    compRowCat6.classList.remove('active');
-    compRowCat6a.classList.remove('active');
-    compRowFiber.classList.remove('active');
-
-    // Seleccionar costo de la categoría activa
-    let totalCable = 0;
-    let cableLabel = '';
-    let cableName = '';
-
-    if (cableType === 'cat6') {
-        totalCable = costCat6;
-        cableName = 'Cat6 UTP';
-        compRowCat6.classList.add('active');
-    } else if (cableType === 'cat6a') {
-        totalCable = costCat6a;
-        cableName = 'Cat6A F/UTP';
-        compRowCat6a.classList.add('active');
-    } else if (cableType === 'fiber') {
-        totalCable = costFiber;
-        cableName = currentLang === 'es' ? 'Fibra Multimodo' : 'Multi-mode Fiber';
-        compRowFiber.classList.add('active');
-    }
-    
-    cableLabel = `${cableName} (€${totalCable.toFixed(2)})`;
-    sumCableDisplay.textContent = cableLabel;
-
-    // 3. Adicionales
-    let totalRack = 0;
-    if (optRack.checked) {
-        totalRack = 300 + (nodes * 3);
-        sumRackDisplay.textContent = `${t.js_included} (€${totalRack.toFixed(2)})`;
-        optionCardRack.classList.add('selected');
-    } else {
-        sumRackDisplay.textContent = t.js_not_requested;
-        optionCardRack.classList.remove('selected');
-    }
-
-    let totalCert = 0;
-    if (optCert.checked) {
-        totalCert = Math.max(150, nodes * 8);
-        sumCertDisplay.textContent = `${t.js_included} (€${totalCert.toFixed(2)})`;
-        optionCardCert.classList.add('selected');
-    } else {
-        sumCertDisplay.textContent = t.js_not_requested;
-        optionCardCert.classList.remove('selected');
-    }
-
-    let totalTub = 0;
-    if (optTub.checked) {
-        totalTub = nodes * 15;
-        sumTubDisplay.textContent = `${t.js_included} (€${totalTub.toFixed(2)})`;
-        optionCardTub.classList.add('selected');
-    } else {
-        sumTubDisplay.textContent = t.js_not_requested;
-        optionCardTub.classList.remove('selected');
-    }
-
-    // Total Final
-    const totalFinal = baseManoObra + totalCable + totalRack + totalCert + totalTub;
-    
-    // Animación suave en cambio de precio
-    animatePriceDisplay(totalFinal);
-}
-
-// Animación de conteo del precio
-let currentPriceValue = 0;
-function animatePriceDisplay(targetValue) {
-    const duration = 400; // ms
-    const startTime = performance.now();
-    const startValue = currentPriceValue;
-
-    function updatePrice(currentTime) {
-        const elapsedTime = currentTime - startTime;
-        if (elapsedTime >= duration) {
-            priceDisplay.textContent = Math.round(targetValue).toLocaleString();
-            currentPriceValue = targetValue;
-        } else {
-            const progress = elapsedTime / duration;
-            // Easing de desaceleración
-            const easeProgress = 1 - Math.pow(1 - progress, 3); 
-            const currentValue = startValue + (targetValue - startValue) * easeProgress;
-            priceDisplay.textContent = Math.round(currentValue).toLocaleString();
-            requestAnimationFrame(updatePrice);
-        }
-    }
-    requestAnimationFrame(updatePrice);
-}
-
-// Event Listeners para Cotizador
-nodesInput.addEventListener('input', calculateTotal);
-distanceInput.addEventListener('input', calculateTotal);
-categorySelect.addEventListener('change', calculateTotal);
-optRack.addEventListener('change', calculateTotal);
-optCert.addEventListener('change', calculateTotal);
-optTub.addEventListener('change', calculateTotal);
-
-// Permitir hacer clic en la tarjeta del checkbox completa
-optionCardRack.addEventListener('click', (e) => {
-    if (e.target !== optRack) {
-        optRack.checked = !optRack.checked;
-        calculateTotal();
-    }
-});
-optionCardCert.addEventListener('click', (e) => {
-    if (e.target !== optCert) {
-        optCert.checked = !optCert.checked;
-        calculateTotal();
-    }
-});
-optionCardTub.addEventListener('click', (e) => {
-    if (e.target !== optTub) {
-        optTub.checked = !optTub.checked;
-        calculateTotal();
-    }
-});
-
-// Inicialización del cotizador
-calculateTotal();
-
-// ==========================================
-// FORMULARIO DE CONTACTO E INTEGRACIÓN
+// FORMULARIO DE CONTACTO
 // ==========================================
 const contactForm = document.getElementById('contact-form');
 const btnFormSubmit = document.getElementById('btn-form-submit');
 const formAlert = document.getElementById('form-alert');
 const txtDescription = document.getElementById('form-desc');
-const btnCalcRequest = document.getElementById('btn-calc-request');
-
-// Integrar cotizador con formulario de contacto
-function generateQuoteDescription() {
-    const nodes = nodesInput.value;
-    const distance = distanceInput.value;
-    const totalMeters = nodes * distance;
-    
-    // Obtener texto de categoría de cable actual
-    const cableType = categorySelect.options[categorySelect.selectedIndex].text;
-    
-    const t = translations[currentLang] || translations['es'];
-    
-    let extras = [];
-    if (optRack.checked) {
-        extras.push(currentLang === 'es' ? "Instalación de Rack/Patch Panels" : "Rack & Patch Panels Installation");
-    }
-    if (optCert.checked) {
-        extras.push(currentLang === 'es' ? "Certificación Fluke" : "Fluke Certification");
-    }
-    if (optTub.checked) {
-        extras.push(currentLang === 'es' ? "Canalizaciones/PVC" : "Conduits/PVC");
-    }
-    
-    const extrasStr = extras.join(', ') || t.js_quote_msg_none;
-    const totalEst = priceDisplay.textContent;
-
-    txtDescription.value = `${t.js_quote_msg_header}
-- ${t.js_quote_msg_points}: ${nodes}
-- ${t.js_quote_msg_distance}: ${distance} m (${t.js_quote_msg_total_cable}: ${totalMeters.toLocaleString()} m)
-- ${t.js_quote_msg_category}: ${cableType}
-- ${t.js_quote_msg_services}: ${extrasStr}
-- ${t.js_quote_msg_est}: EUR €${totalEst}
-
-${t.js_quote_msg_waiting}`;
-}
-
-btnCalcRequest.addEventListener('click', () => {
-    generateQuoteDescription();
-});
 
 // Envío del formulario con soporte híbrido de pruebas (cliente directo a Web3Forms) y producción (PHP a Hostinger)
 contactForm.addEventListener('submit', (e) => {
@@ -845,9 +614,14 @@ contactForm.addEventListener('submit', (e) => {
     btnFormSubmit.disabled = true;
 
     // Obtener campos del formulario
-    const name = document.getElementById('form-name').value;
-    const email = document.getElementById('form-email').value;
-    const description = document.getElementById('form-desc').value;
+    const name = document.getElementById('form-name').value.trim();
+    const email = document.getElementById('form-email').value.trim();
+    const phone = document.getElementById('form-phone') ? document.getElementById('form-phone').value.trim() : '';
+    const deptSelect = document.getElementById('form-dept');
+    const department = deptSelect ? deptSelect.value : 'Cotizaciones y Ventas';
+    const description = document.getElementById('form-desc').value.trim();
+
+    const clientData = { name, email, phone, department, description };
 
     // MODO DE EJECUCIÓN DEL CLIENTE:
     // - 'testing': Envía de forma directa al API de Web3Forms desde el navegador del usuario (evita bloqueos de IP del servidor Hostinger).
@@ -861,8 +635,10 @@ contactForm.addEventListener('submit', (e) => {
             access_key: web3formsAccessKey,
             name: name,
             email: email,
-            subject: (currentLang === 'en' ? 'RACON INGENIERIA - Quote Request: ' : 'RACON INGENIERIA - Solicitud de Presupuesto: ') + name,
-            message: `Cliente: ${name}\nEmail: ${email}\n\n-------------------------\nDETALLE DEL PRESUPUESTO:\n-------------------------\n${description}`,
+            phone: phone || 'No proporcionado',
+            department: department,
+            subject: (currentLang === 'en' ? 'RACON INGENIERIA - Quote Request: ' : 'RACON INGENIERIA - Solicitud de Presupuesto: ') + `[${department}] ` + name,
+            message: `Cliente: ${name}\nDepartamento: ${department}\nEmail de contacto: ${email}\nTeléfono: ${phone || 'No proporcionado'}\n\n-------------------------\nDETALLE DEL PRESUPUESTO:\n-------------------------\n${description}`,
             from_name: 'RACON INGENIERIA Web'
         };
 
@@ -882,9 +658,7 @@ contactForm.addEventListener('submit', (e) => {
         })
         .then(data => {
             if (data.success) {
-                formAlert.style.display = 'block';
-                formAlert.className = 'form-alert success form-message';
-                formAlert.textContent = t.js_alert_success_local || '¡Presupuesto solicitado con éxito! Nos pondremos en contacto con usted a la brevedad posible.';
+                showContactSuccessCard(clientData);
                 contactForm.reset();
             } else {
                 throw new Error(data.message || 'Error en la API');
@@ -901,15 +675,14 @@ contactForm.addEventListener('submit', (e) => {
         .finally(() => {
             btnFormSubmit.innerHTML = originalText;
             btnFormSubmit.disabled = false;
-            setTimeout(() => {
-                formAlert.style.display = 'none';
-            }, 8000);
         });
     } else {
         // Modo Producción: Envío a través de send_quote.php en Hostinger
         const formData = new FormData();
         formData.append('name', name);
         formData.append('email', email);
+        formData.append('phone', phone);
+        formData.append('department', department);
         formData.append('description', description);
         formData.append('lang', currentLang);
 
@@ -925,9 +698,7 @@ contactForm.addEventListener('submit', (e) => {
         })
         .then(data => {
             if (data.status === 'success') {
-                formAlert.style.display = 'block';
-                formAlert.className = 'form-alert success form-message';
-                formAlert.textContent = data.message;
+                showContactSuccessCard(clientData);
                 contactForm.reset();
             } else {
                 throw new Error(data.message || 'Error en el servidor');
@@ -942,12 +713,81 @@ contactForm.addEventListener('submit', (e) => {
         .finally(() => {
             btnFormSubmit.innerHTML = originalText;
             btnFormSubmit.disabled = false;
-            setTimeout(() => {
-                formAlert.style.display = 'none';
-            }, 8000);
         });
     }
 });
+
+// Renderizar tarjeta de éxito con botones directos para WhatsApp y Llamada
+function showContactSuccessCard(clientData) {
+    const t = translations[currentLang] || translations.es;
+    const raconPhoneClean = '34627837298';
+
+    // Construcción del mensaje pre-armado de WhatsApp
+    let waText = `*SOLICITUD DE COTIZACIÓN - RACON INGENIERÍA*\n`;
+    waText += `*Departamento:* ${clientData.department}\n`;
+    waText += `*Cliente:* ${clientData.name}\n`;
+    waText += `*Email:* ${clientData.email}\n`;
+    if (clientData.phone) {
+        waText += `*Teléfono:* ${clientData.phone}\n`;
+    }
+    waText += `\n*Detalles del Proyecto:*\n${clientData.description}`;
+
+    const waUrl = `https://wa.me/${raconPhoneClean}?text=${encodeURIComponent(waText)}`;
+    const telUrl = `tel:+${raconPhoneClean}`;
+
+    formAlert.style.display = 'block';
+    formAlert.className = 'form-message';
+    formAlert.innerHTML = `
+        <div class="contact-success-card">
+            <div class="contact-success-header">
+                <div class="contact-success-icon">&#10004;</div>
+                <div>
+                    <h4 class="contact-success-title">${t.contact_success_title || '¡Solicitud de Cotización Recibida!'}</h4>
+                    <p class="contact-success-subtitle">${t.contact_success_subtitle || 'Su requerimiento técnico ha sido enviado a nuestro equipo por correo. Para una atención inmediata, elija cómo desea comunicarse ahora:'}</p>
+                </div>
+            </div>
+            
+            <div class="contact-dept-pill">
+                <span>${t.contact_target_dept || 'Departamento:'}</span> <strong>${clientData.department}</strong>
+            </div>
+
+            <div class="contact-actions-grid">
+                <a href="${waUrl}" target="_blank" rel="noopener noreferrer" class="btn-contact-action btn-action-whatsapp">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+                        <path d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946C.06 5.348 5.397.01 12.008.01c3.202.001 6.212 1.246 8.477 3.514 2.266 2.268 3.507 5.28 3.505 8.484-.004 6.657-5.34 11.997-11.953 11.997-2.005-.001-3.973-.502-5.724-1.455L0 24zm6.59-4.846c1.6.95 3.188 1.449 4.825 1.451 5.436 0 9.86-4.37 9.864-9.799.002-2.63-1.023-5.101-2.885-6.963C16.528 2.025 14.09 1 11.99 1c-5.45 0-9.875 4.374-9.879 9.803-.002 1.758.465 3.479 1.355 5.027l-.988 3.606 3.73-.978zm11.233-6.04c-.3-.15-1.771-.875-2.046-.975-.276-.1-.476-.15-.676.15-.2.3-.775.975-.95 1.175-.175.2-.35.225-.65.075-.3-.15-1.267-.467-2.414-1.492-.893-.797-1.495-1.78-1.67-2.08-.175-.3-.019-.462.13-.61.135-.133.3-.35.45-.525.15-.175.2-.3.3-.5s.05-.375-.025-.525c-.075-.15-.676-1.63-.926-2.235-.244-.589-.492-.51-.676-.518-.174-.007-.375-.007-.575-.007-.2 0-.525.075-.8.375-.275.3-1.05 1.025-1.05 2.5s1.075 2.9 1.225 3.1c.15.2 2.113 3.227 5.12 4.527.714.31 1.272.495 1.706.633.717.227 1.37.195 1.887.118.575-.085 1.771-.725 2.021-1.425.25-.7.25-1.3.175-1.425-.075-.125-.275-.2-.575-.35z"/>
+                    </svg>
+                    <span>${t.contact_btn_whatsapp || 'Abrir Chat de WhatsApp'}</span>
+                </a>
+                <a href="${telUrl}" class="btn-contact-action btn-action-call">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
+                        <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/>
+                    </svg>
+                    <span>${t.contact_btn_call || 'Llamar al Departamento'}</span>
+                </a>
+            </div>
+        </div>
+    `;
+
+    // Desplazamiento suave para que el usuario vea la tarjeta de contacto
+    formAlert.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+}
+
+// Configurar enlace rápido de WhatsApp antes de enviar
+const quickLinkWa = document.getElementById('quick-link-whatsapp');
+if (quickLinkWa) {
+    quickLinkWa.addEventListener('click', () => {
+        const nameVal = document.getElementById('form-name')?.value.trim();
+        const deptVal = document.getElementById('form-dept')?.value;
+        const descVal = document.getElementById('form-desc')?.value.trim();
+        
+        let msg = `Hola RACON INGENIERÍA.`;
+        if (deptVal) msg += ` Me comunico con el departamento de ${deptVal}.`;
+        if (nameVal) msg += ` Mi nombre es ${nameVal}.`;
+        if (descVal) msg += `\n\nConsulta:\n${descVal}`;
+        
+        quickLinkWa.href = `https://wa.me/34627837298?text=${encodeURIComponent(msg)}`;
+    });
+}
 
 // ==========================================
 // MAPA INTERACTIVO (LEAFLET.JS)
@@ -964,12 +804,11 @@ function updateMapTileLayer(isLight) {
     }
     
     const tileUrl = isLight 
-        ? 'https://{s}.basemaps.cartocdn.com/light_nolabels/{z}/{x}/{y}{r}.png'
-        : 'https://{s}.basemaps.cartocdn.com/dark_nolabels/{z}/{x}/{y}{r}.png';
+        ? 'https://server.arcgisonline.com/ArcGIS/rest/services/Canvas/World_Light_Gray_Base/MapServer/tile/{z}/{y}/{x}'
+        : 'https://server.arcgisonline.com/ArcGIS/rest/services/Canvas/World_Dark_Gray_Base/MapServer/tile/{z}/{y}/{x}';
         
     currentTileLayer = L.tileLayer(tileUrl, {
-        subdomains: 'abcd',
-        maxZoom: 20
+        maxZoom: 16
     });
     
     currentTileLayer.addTo(map);
@@ -1064,5 +903,437 @@ try {
     console.warn('Leaflet map initialization failed:', e);
 }
 
-// Inicializar el idioma al cargar la página
+// ==========================================
+// MÓDULO DE RESEÑAS Y TESTIMONIOS (CARRUSEL ROTATIVO DE 10 + API SEGURA)
+// ==========================================
+const reviewsCarouselTrack = document.getElementById('reviews-carousel-track');
+const reviewsCarouselViewport = document.getElementById('reviews-carousel-viewport');
+const revCarouselPrev = document.getElementById('rev-carousel-prev');
+const revCarouselNext = document.getElementById('rev-carousel-next');
+const reviewsCarouselDots = document.getElementById('reviews-carousel-dots');
+const reviewsRotationTag = document.getElementById('reviews-rotation-tag');
+
+const btnScrollReview = document.getElementById('btn-scroll-review');
+const formSubmitReview = document.getElementById('form-submit-review');
+const btnSubmitReview = document.getElementById('btn-submit-review');
+const reviewFormStatusAlert = document.getElementById('review-form-status-alert');
+const starPickBtns = document.querySelectorAll('.star-pick-btn');
+const formReviewRatingInput = document.getElementById('form-review-rating');
+const reviewCsrfTokenInput = document.getElementById('review_csrf_token');
+
+let allReviewsData = [];
+let dailyReviewsData = [];
+let activeCsrfToken = '';
+let currentRevSlide = 0;
+let carouselAutoplayTimer = null;
+
+// Obtener URL de la API de reseñas dinámica (Soporta file:/// y servidor local o remoto)
+function getReviewsApiUrl() {
+    if (window.location.protocol === 'file:') {
+        return 'http://localhost/racon/api_reviews.php';
+    }
+    return 'api_reviews.php';
+}
+
+function getInitials(name) {
+    if (!name) return 'RC';
+    const parts = name.trim().split(/\s+/);
+    if (parts.length >= 2) return (parts[0][0] + parts[1][0]).toUpperCase();
+    return name.substring(0, 2).toUpperCase();
+}
+
+function renderStarsHtml(rating) {
+    let starsHtml = '';
+    const safeRating = Math.max(1, Math.min(5, parseInt(rating) || 5));
+    for (let i = 1; i <= 5; i++) {
+        starsHtml += i <= safeRating ? '&#9733;' : '&#9734;';
+    }
+    return starsHtml;
+}
+
+// Algoritmo de rotación diaria: Día 1 muestra 1 a 10, Día 2 muestra 11 a 20, etc.
+function getDailyRotatingReviews(allReviews) {
+    if (!allReviews || allReviews.length === 0) return [];
+    if (allReviews.length <= 10) return allReviews;
+
+    const pageSize = 10;
+    const now = new Date();
+    const startOfYear = new Date(now.getFullYear(), 0, 0);
+    const diff = now - startOfYear;
+    const oneDay = 1000 * 60 * 60 * 24;
+    const dayOfYear = Math.floor(diff / oneDay);
+
+    const numBatches = Math.ceil(allReviews.length / pageSize);
+    const batchIndex = dayOfYear % numBatches;
+    const startIndex = batchIndex * pageSize;
+
+    const daily = [];
+    for (let i = 0; i < pageSize; i++) {
+        const idx = (startIndex + i) % allReviews.length;
+        daily.push(allReviews[idx]);
+    }
+    return daily;
+}
+
+function getCardsPerView() {
+    if (window.innerWidth < 700) return 1;
+    if (window.innerWidth < 1060) return 2;
+    return 3;
+}
+
+function getMaxSlideIndex() {
+    const cardsPerView = getCardsPerView();
+    return Math.max(0, dailyReviewsData.length - cardsPerView);
+}
+
+function updateCarouselPosition() {
+    if (!reviewsCarouselTrack || !reviewsCarouselViewport) return;
+
+    const maxSlide = getMaxSlideIndex();
+    if (currentRevSlide > maxSlide) currentRevSlide = maxSlide;
+    if (currentRevSlide < 0) currentRevSlide = 0;
+
+    const firstCard = reviewsCarouselTrack.querySelector('.review-card');
+    if (firstCard) {
+        const cardWidth = firstCard.offsetWidth;
+        const gap = 24;
+        const offset = currentRevSlide * (cardWidth + gap);
+        reviewsCarouselTrack.style.transform = `translateX(-${offset}px)`;
+    }
+
+    // Actualizar botones prev/next
+    if (revCarouselPrev) revCarouselPrev.disabled = currentRevSlide === 0;
+    if (revCarouselNext) revCarouselNext.disabled = currentRevSlide >= maxSlide;
+
+    // Actualizar dots
+    renderCarouselDots();
+}
+
+function renderCarouselDots() {
+    if (!reviewsCarouselDots) return;
+    const maxSlide = getMaxSlideIndex();
+    const totalDots = maxSlide + 1;
+
+    let dotsHtml = '';
+    for (let i = 0; i < totalDots; i++) {
+        dotsHtml += `<button type="button" class="reviews-dot ${i === currentRevSlide ? 'active' : ''}" data-index="${i}" aria-label="Ir a página ${i + 1}"></button>`;
+    }
+    reviewsCarouselDots.innerHTML = dotsHtml;
+
+    reviewsCarouselDots.querySelectorAll('.reviews-dot').forEach(btn => {
+        btn.addEventListener('click', () => {
+            currentRevSlide = parseInt(btn.getAttribute('data-index')) || 0;
+            updateCarouselPosition();
+        });
+    });
+}
+
+function renderDailyCarousel(reviews) {
+    if (!reviewsCarouselTrack) return;
+
+    if (!reviews || reviews.length === 0) {
+        const t = translations[currentLang] || translations['es'];
+        reviewsCarouselTrack.innerHTML = `<div style="text-align: center; color: var(--text-muted); padding: 40px; width: 100%;">${t.reviews_empty_msg || 'Aún no hay reseñas registradas.'}</div>`;
+        return;
+    }
+
+    reviewsCarouselTrack.innerHTML = reviews.map(r => {
+        const initials = getInitials(r.name);
+        const stars = renderStarsHtml(r.rating);
+        const dateStr = r.created_at ? r.created_at.split(' ')[0] : '2026';
+
+        return `
+            <div class="review-card" data-id="${r.id}">
+                <div>
+                    <div class="review-card-header">
+                        <div class="review-avatar">${initials}</div>
+                        <div class="review-author-info">
+                            <h4 class="review-author-name">${r.name}</h4>
+                            <p class="review-author-company">${r.company || 'Cliente Corporativo'}</p>
+                        </div>
+                    </div>
+                    <div class="review-stars">${stars}</div>
+                    <p class="review-comment">"${r.comment}"</p>
+                </div>
+                <div class="review-footer-date">
+                    <span>${dateStr}</span>
+                    <span style="color: var(--secondary); font-weight:600;">${r.rating}.0 / 5.0</span>
+                </div>
+            </div>
+        `;
+    }).join('');
+
+    currentRevSlide = 0;
+    setTimeout(() => {
+        updateCarouselPosition();
+    }, 50);
+}
+
+// Navegación de botones prev y next
+if (revCarouselPrev) {
+    revCarouselPrev.addEventListener('click', () => {
+        if (currentRevSlide > 0) {
+            currentRevSlide--;
+            updateCarouselPosition();
+        }
+    });
+}
+
+if (revCarouselNext) {
+    revCarouselNext.addEventListener('click', () => {
+        const maxSlide = getMaxSlideIndex();
+        if (currentRevSlide < maxSlide) {
+            currentRevSlide++;
+            updateCarouselPosition();
+        }
+    });
+}
+
+// Soporte táctil / swipe en móviles
+if (reviewsCarouselViewport) {
+    let startX = 0;
+    let isTouching = false;
+
+    reviewsCarouselViewport.addEventListener('touchstart', (e) => {
+        startX = e.touches[0].clientX;
+        isTouching = true;
+    }, { passive: true });
+
+    reviewsCarouselViewport.addEventListener('touchend', (e) => {
+        if (!isTouching) return;
+        const endX = e.changedTouches[0].clientX;
+        const diff = startX - endX;
+
+        if (diff > 45) {
+            // Swipe izquierda -> Siguiente
+            const maxSlide = getMaxSlideIndex();
+            if (currentRevSlide < maxSlide) {
+                currentRevSlide++;
+                updateCarouselPosition();
+            }
+        } else if (diff < -45) {
+            // Swipe derecha -> Anterior
+            if (currentRevSlide > 0) {
+                currentRevSlide--;
+                updateCarouselPosition();
+            }
+        }
+        isTouching = false;
+    }, { passive: true });
+}
+
+window.addEventListener('resize', () => {
+    updateCarouselPosition();
+});
+
+// Calcular promedio de calificación real basado en las reseñas de la base de datos
+function updateKpiRating(reviews) {
+    const kpiScoreVal = document.getElementById('kpi-score-val');
+    const kpiStarsRow = document.getElementById('kpi-stars-row');
+    if (!kpiScoreVal && !kpiStarsRow) return;
+
+    if (!reviews || reviews.length === 0) {
+        if (kpiScoreVal) kpiScoreVal.textContent = '5.0 / 5.0';
+        if (kpiStarsRow) {
+            let defaultStars = '';
+            for (let i = 1; i <= 5; i++) {
+                defaultStars += '<span class="kpi-star">&#9733;</span>';
+            }
+            kpiStarsRow.innerHTML = defaultStars;
+        }
+        return;
+    }
+
+    const totalRatings = reviews.reduce((sum, r) => sum + (parseFloat(r.rating) || 5), 0);
+    const avg = totalRatings / reviews.length;
+    const formattedAvg = avg.toFixed(1);
+
+    if (kpiScoreVal) {
+        kpiScoreVal.textContent = `${formattedAvg} / 5.0`;
+    }
+
+    if (kpiStarsRow) {
+        const roundedStars = Math.round(avg);
+        let starsHtml = '';
+        for (let i = 1; i <= 5; i++) {
+            starsHtml += `<span class="kpi-star">${i <= roundedStars ? '&#9733;' : '&#9734;'}</span>`;
+        }
+        kpiStarsRow.innerHTML = starsHtml;
+    }
+}
+
+// Cargar reseñas directamente desde la base de datos MySQL (Sin datos estáticos en código)
+function fetchReviews() {
+    fetch(getReviewsApiUrl())
+        .then(res => {
+            if (!res.ok) throw new Error('API status: ' + res.status);
+            return res.json();
+        })
+        .then(data => {
+            if (data && data.success && Array.isArray(data.reviews)) {
+                allReviewsData = data.reviews;
+                activeCsrfToken = data.csrf_token || '';
+            } else {
+                allReviewsData = [];
+            }
+            if (reviewCsrfTokenInput && activeCsrfToken) {
+                reviewCsrfTokenInput.value = activeCsrfToken;
+            }
+            dailyReviewsData = getDailyRotatingReviews(allReviewsData);
+            renderDailyCarousel(dailyReviewsData);
+            updateKpiRating(allReviewsData);
+        })
+        .catch(err => {
+            console.warn('Conexión con la base de datos de reseñas:', err);
+            allReviewsData = [];
+            dailyReviewsData = [];
+            renderDailyCarousel(dailyReviewsData);
+            updateKpiRating(allReviewsData);
+        });
+}
+
+function updateReviewsLanguage() {
+    if (dailyReviewsData && dailyReviewsData.length > 0) {
+        renderDailyCarousel(dailyReviewsData);
+    }
+}
+
+// Desplazamiento fluido al formulario inline cuando se pulsa "Dejar una Reseña"
+if (btnScrollReview) {
+    btnScrollReview.addEventListener('click', (e) => {
+        e.preventDefault();
+        const targetForm = document.getElementById('formulario-resena');
+        if (targetForm) {
+            targetForm.scrollIntoView({ behavior: 'smooth', block: 'center' });
+            setTimeout(() => {
+                const nameInput = document.getElementById('form-review-name');
+                if (nameInput) nameInput.focus();
+            }, 500);
+        }
+    });
+}
+
+// Selector interactivo de estrellas
+starPickBtns.forEach(btn => {
+    btn.addEventListener('click', () => {
+        const rating = parseInt(btn.getAttribute('data-rating')) || 5;
+        if (formReviewRatingInput) {
+            formReviewRatingInput.value = rating;
+        }
+        updateStarPickerUI(rating);
+    });
+
+    btn.addEventListener('mouseenter', () => {
+        const rating = parseInt(btn.getAttribute('data-rating')) || 5;
+        updateStarPickerUI(rating);
+    });
+});
+
+const starsPickerContainer = document.getElementById('stars-picker');
+if (starsPickerContainer) {
+    starsPickerContainer.addEventListener('mouseleave', () => {
+        const currentRating = parseInt(formReviewRatingInput?.value) || 5;
+        updateStarPickerUI(currentRating);
+    });
+}
+
+function updateStarPickerUI(rating) {
+    starPickBtns.forEach(btn => {
+        const r = parseInt(btn.getAttribute('data-rating')) || 1;
+        if (r <= rating) {
+            btn.classList.add('active');
+        } else {
+            btn.classList.remove('active');
+        }
+    });
+}
+
+// Envío del formulario de reseña
+if (formSubmitReview) {
+    formSubmitReview.addEventListener('submit', (e) => {
+        e.preventDefault();
+
+        const t = translations[currentLang] || translations['es'];
+        const nameVal = document.getElementById('form-review-name')?.value.trim();
+        const commentVal = document.getElementById('form-review-comment')?.value.trim();
+
+        if (!nameVal || nameVal.length < 2) {
+            showReviewStatus(false, 'Por favor ingrese su nombre (mínimo 2 caracteres).');
+            return;
+        }
+
+        if (!commentVal || commentVal.length < 10) {
+            showReviewStatus(false, 'Por favor escriba una reseña detallada (mínimo 10 caracteres).');
+            return;
+        }
+
+        const originalBtnHtml = btnSubmitReview.innerHTML;
+        btnSubmitReview.disabled = true;
+        btnSubmitReview.innerHTML = `<span>${t.reviews_form_sending || 'Publicando...'}</span> <div style="display:inline-block; width:12px; height:12px; border:2px solid #ff6f00; border-radius:50%; border-top-color:transparent; animation:rotate 0.8s linear infinite; margin-left:8px;"></div>`;
+
+        const formData = new FormData(formSubmitReview);
+        if (!formData.get('csrf_token') && activeCsrfToken) {
+            formData.set('csrf_token', activeCsrfToken);
+        }
+
+        fetch(getReviewsApiUrl(), {
+            method: 'POST',
+            body: formData
+        })
+        .then(res => res.json())
+        .then(data => {
+            btnSubmitReview.disabled = false;
+            btnSubmitReview.innerHTML = originalBtnHtml;
+
+            if (data.success) {
+                const currentT = translations[currentLang] || translations.es;
+                const successMsg = (currentLang === 'en' && currentT.reviews_form_success_pending) 
+                    ? currentT.reviews_form_success_pending 
+                    : (data.message || currentT.reviews_form_success_pending || '¡Reseña registrada con éxito! Será evaluada por nuestro equipo antes de su publicación.');
+                showReviewStatus(true, successMsg);
+                
+                if (data.new_token) {
+                    activeCsrfToken = data.new_token;
+                    if (reviewCsrfTokenInput) reviewCsrfTokenInput.value = data.new_token;
+                }
+
+                // Solo agregar de inmediato al carrusel si el estatus ya es aprobado
+                if (data.status === 'approved' && data.review) {
+                    allReviewsData.unshift(data.review);
+                    dailyReviewsData = getDailyRotatingReviews(allReviewsData);
+                    renderDailyCarousel(dailyReviewsData);
+                    updateKpiRating(allReviewsData);
+                }
+
+                formSubmitReview.reset();
+                if (formReviewRatingInput) formReviewRatingInput.value = 5;
+                updateStarPickerUI(5);
+
+                setTimeout(() => {
+                    if (reviewFormStatusAlert) {
+                        reviewFormStatusAlert.style.display = 'none';
+                    }
+                }, 6000);
+            } else {
+                showReviewStatus(false, data.error || 'Ocurrió un error al registrar la reseña en la base de datos.');
+            }
+        })
+        .catch(err => {
+            btnSubmitReview.disabled = false;
+            btnSubmitReview.innerHTML = originalBtnHtml;
+            showReviewStatus(false, 'No se pudo conectar con el backend local. Asegúrese de que Apache y MySQL estén iniciados en XAMPP.');
+        });
+    });
+}
+
+function showReviewStatus(isSuccess, message) {
+    if (!reviewFormStatusAlert) return;
+    reviewFormStatusAlert.style.display = 'block';
+    reviewFormStatusAlert.className = `form-message ${isSuccess ? 'success' : 'error'}`;
+    reviewFormStatusAlert.textContent = message;
+}
+
+// INICIALIZACIÓN GLOBAL DE APLICACIÓN
+fetchReviews();
 setLanguage(currentLang);
+

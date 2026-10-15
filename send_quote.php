@@ -40,6 +40,7 @@ if ($lang === 'en') {
     $mail_subject_prefix = 'New Quote Request: ';
     $mail_title = 'Quote Request from Web';
     $mail_label_client = 'Client';
+    $mail_label_dept = 'Department';
     $mail_label_email = 'Contact Email';
     $mail_label_phone = 'Phone';
     $mail_label_phone_none = 'Not provided';
@@ -55,6 +56,7 @@ if ($lang === 'en') {
     $mail_subject_prefix = 'Nueva Solicitud de Presupuesto: ';
     $mail_title = 'Solicitud de Cotización desde la Web';
     $mail_label_client = 'Cliente';
+    $mail_label_dept = 'Departamento';
     $mail_label_email = 'Correo de Contacto';
     $mail_label_phone = 'Teléfono';
     $mail_label_phone_none = 'No proporcionado';
@@ -77,6 +79,7 @@ if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
 $name = strip_tags(trim($_POST['name'] ?? ''));
 $email = filter_var(trim($_POST['email'] ?? ''), FILTER_SANITIZE_EMAIL);
 $phone = strip_tags(trim($_POST['phone'] ?? ''));
+$department = strip_tags(trim($_POST['department'] ?? 'Cotizaciones y Ventas'));
 $description = strip_tags(trim($_POST['description'] ?? ''));
 
 // Validación básica
@@ -97,7 +100,7 @@ if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
 }
 
 // Asunto del correo
-$subject = $mail_subject_prefix . $name;
+$subject = $mail_subject_prefix . '[' . $department . '] ' . $name;
 
 // Construir cuerpo del correo en HTML con diseño corporativo
 $email_content = '
@@ -187,6 +190,10 @@ $email_content = '
                 <div class="field-value">' . htmlspecialchars($name) . '</div>
             </div>
             <div class="field-group">
+                <div class="field-title">' . $mail_label_dept . '</div>
+                <div class="field-value" style="font-weight: bold; color: #ff6f00;">' . htmlspecialchars($department) . '</div>
+            </div>
+            <div class="field-group">
                 <div class="field-title">' . $mail_label_email . '</div>
                 <div class="field-value"><a href="mailto:' . htmlspecialchars($email) . '" style="color: #ff6f00; text-decoration: none;">' . htmlspecialchars($email) . '</a></div>
             </div>
@@ -221,12 +228,13 @@ if ($mode === 'testing') {
 
     // Armamos los datos requeridos por la API de Web3Forms
     $post_data = [
-        'access_key' => $web3forms_access_key,
-        'name'       => $name,
-        'email'      => $email,
-        'subject'    => $subject,
-        'message'    => "Cliente: $name\nEmail de contacto: $email\n\n---------------------------------\nDETALLE DEL PRESUPUESTO:\n---------------------------------\n" . $description,
-        'from_name'  => 'RACON INGENIERÍA Web'
+        'access_key'   => $web3forms_access_key,
+        'name'         => $name,
+        'email'        => $email,
+        'subject'      => $subject,
+        'Departamento' => $department,
+        'message'      => "Cliente: $name\nDepartamento: $department\nEmail de contacto: $email\nTeléfono: " . ($phone ?: 'No proporcionado') . "\n\n---------------------------------\nDETALLE DEL PRESUPUESTO:\n---------------------------------\n" . $description,
+        'from_name'    => 'RACON INGENIERÍA Web'
     ];
 
     // Envío vía cURL con fallback a file_get_contents (en caso de que cURL esté deshabilitado en Hostinger)
